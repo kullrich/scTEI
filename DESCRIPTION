@@ -1,0 +1,57 @@
+Package: scTEI
+Type: Package
+Title: add any phylogenetically based transcriptome evolutionary index (TEI) to
+    single-cell data objects
+Version: 0.1.0
+Authors@R: 
+    person(given = "Kristian K",
+           family = "Ullrich",
+           role = c("aut", "cre"),
+           email = "ullrich@evolbio.mpg.de",
+           comment = c(ORCID = "0000-0003-4308-9626"))
+Description: scTEI add any phylogenetically based transcriptome evolutionary
+    index (TEI) to single-cell data objects
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Depends:
+  R (>= 4.2.0)
+Imports:
+  Rcpp (>= 1.0.8.3),
+  Matrix,
+  ggplot2,
+  viridis,
+  cowplot,
+  ComplexHeatmap,
+  myTAI
+Suggests:
+  rmarkdown,
+  knitr,
+  devtools,
+  testthat,
+  readr,
+  Seurat,
+  SeuratData,
+  Matrix.utils,
+  BiocGenerics,
+  DelayedArray,
+  DelayedMatrixStats,
+  limma,
+  S4Vectors,
+  SingleCellExperiment,
+  SummarizedExperiment,
+  batchelor,
+  org.Hs.eg.db,
+  org.Mm.eg.db,
+  BiocStyle
+LinkingTo:
+  Rcpp,
+  RcppArmadillo,
+  RcppThread,
+  cpp11
+VignetteBuilder: knitr
+NeedsCompilation: yes
+SystemRequirements: C++11
+URL: https://github.com/kullrich/scTEI
+BugReports: https://github.com/kullrich/scTEI/issues
+RoxygenNote: 7.2.1

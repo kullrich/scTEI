@@ -1,0 +1,577 @@
+---
+title: "Single-Cell Expression Analysis with `scTEI`"
+author: "Kristian K Ullrich"
+date: "`r Sys.Date()`"
+abstract: >
+    scTEI add any phylogenetically based transcriptome evolutionary
+    index (TEI) to single-cell data objects
+bibliography: bibliography.bib
+nocite: '@*'
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Single-Cell Expression Analysis with `scTEI`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+library(scTEI)
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(plyr))
+suppressPackageStartupMessages(library(readr))
+suppressPackageStartupMessages(library(viridis))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(Seurat))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressPackageStartupMessages(library(monocle3))
+```
+
+# Introduction
+
+The goal of `scTEI` is to provide easy functionality to add phylogenetically
+based transcriptome evolutionary index (TEI) to single-cell data objects.
+
+For a comprehensive overview about the topic of gene age assignments,
+transcriptome age index (TAI) and its derivates (TDI, TPI, Adjusted SD,
+PhastCons, ...) see e.g.:
+
+- [myTAI - Introduction](https://drostlab.github.io/myTAI/articles/Introduction.html)
+- TAI: [@domazet2007phylostratigraphy]
+- TAI: [@domazet2010phylogenetically]
+- TDI: [@quint2012transcriptomic]
+- TDI: [@drost2017cross]
+- TPI: [@gossmann2016transcriptomes]
+- Adjusted SD, PhastCons: [@liu2020inter]
+
+Since all of these values deal with the topic of weigthing transcriptome data
+with an evolutionary index, I combine all of them under one term
+_transcriptome evolutionary index_, short _TEI_.
+
+The following sections introduce main _single-cell_ gene expression data
+analysis techniques implemented in `scTEI`, which basically update basic
+`myTAI` functions to deal with large _single-cell_ data objects:
+
+- Adding transcriptome evolutionary index (TEI) to single-cell data objects
+ + Seurat
+ + monocle3
+ 
+- Visualizing TEI values
+
+# Adding transcriptome evolutionary index (TEI) to single-cell data objects
+
+A variety of data objects are used to deal with sparse count data
+(`dgCMatrix`) from single-cell RNA sequencing (scRNA-seq).
+
+Here, we focus on the common used R packages `Seurat` and `monocle3`, which
+both use a `sparseMatrix` object to store scRNA count data.
+
+__Note:__ Apparently, one important note is that count data or subsequent
+normalized counts or scaled data needs to be positive.
+
+One should consider transforming scaled data to positive scale prior applying
+TEI calculations.
+
+In this section we will introduce how to add TEI values to either a `seurat`
+or `monocle3` cell data set.
+
+__Note that prior calculating TEI one needs to retrieve phylogenetic or
+taxonomic information for your focal species.__
+
+This might be a *phylostratigraphic map* (as introduced by
+[@domazet2007phylostratigraphy]) or an *ortho map* (I call them, see e.g.
+[@julca2021comparative] or [@cazet2022new]), which can be obtained by
+assigning to each orthogroup (OG) or hierachical orthogroup (HOG) along a
+given species tree the ancestral node.
+
+Please have a look at the introduction of the great `myTAI` package for
+possible sources, how to get such *phylostratigraphic maps*
+([myTAI - Introduction](https://drostlab.github.io/myTAI/articles/Introduction.html)).
+
+To create an *ortho map*, one simply needs to get OGs or HOGs with e.g.
+OrthoFinder ([@emms2019orthofinder]) or Proteinortho
+([@lechner2011proteinortho]) or any other ortholog prediction tool 
+(see [@linard2021ten]) using a set of species that cover the species range 
+of your interest. Parse each OG or HOG for the _oldest clade_ as compared to
+a species tree and your focal species of interest.
+
+Or e.g. use pre-calculated OGs from e.g.
+[https://omabrowser.org/oma/home](https://omabrowser.org/oma/home/)
+([@schneider2007oma]) or [https://bioinformatics.psb.ugent.be/plaza/](https://bioinformatics.psb.ugent.be/plaza/) for plants ([@proost2009plaza]).
+
+# Installation
+
+## Install - Seurat and monocle3
+
+Please visit the following documentation to install `Seurat` and `monocole3`
+
+[Seurat](https://satijalab.org/seurat/articles/install.html)
+
+[monocle3](https://cole-trapnell-lab.github.io/monocle3/docs/installation/)
+
+## Install `org.Hs.eg.db` and `org.Mm.eg.db` to be able to convert ensembl IDs into gene name alias
+
+[org.Hs.eg.db](https://bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html)
+[org.Mm.eg.db](https://bioconductor.org/packages/release/data/annotation/html/org.Mm.eg.db.html)
+
+```
+BiocManager::install(
+    c(
+    "org.Hs.eg.db",
+    "org.Mm.eg.db")
+)
+```
+
+## Install additional plotting packages
+
+[ggplot2](https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html)
+[viridis](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html)
+[cowplot](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html)
+[ComplexHeatmap](https://bioconductor.org/packages/release/bioc/vignettes/ComplexHeatmap/inst/doc/complex_heatmap.html)
+
+```
+install.packages("ggplot2")
+install.packages("viridis")
+install.packages("cowplot")
+BiocManager::install("ComplexHeatmap")
+```
+
+## Load libraries
+```
+library(scTEI)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(cowplot)
+library(ComplexHeatmap)
+library(Seurat)
+suppressWarnings(library(SeuratData))
+library(monocle3)
+```
+
+# Seurat - example
+
+For `Seurat`, we use scRNA data obtained from `SeuratData` for the model
+organism _Caenorhabditis elegans_ [@packer2019lineage] and phylogenetic data
+obtained from [@sun2021single] (Sun2021_Supplemental_Table_S6).
+
+## Example: 6k C. elegans embryos from Packer and Zhu et al (2019)
+
+Here, for demonstration purposes, we will be using the 6k
+_Caenorhabditis elegans_ embryos object that is available via the `SeuratData`
+package.
+
+```{r, warning=FALSE, message=FALSE}
+# load Packer and Zhu et al (2019) data set
+SeuratData::InstallData("celegans.embryo.SeuratData")
+celegans <- SeuratData::LoadData("celegans.embryo")
+dim(celegans)
+head(rownames(celegans))
+```
+
+```{r, warning=FALSE, message=FALSE}
+# preprocess scRNA
+all.genes <- rownames(celegans)
+celegans <- Seurat::NormalizeData(
+    celegans,
+    normalization.method = "LogNormalize",
+    scale.factor = 10000) |>
+    Seurat::FindVariableFeatures(selection.method = "vst",
+    nfeatures = 2000) |>
+    Seurat::ScaleData(features = all.genes) |>
+    Seurat::RunPCA(dims=50) |>
+    Seurat::RunUMAP(dims = 1:10)
+```
+
+```{r, fig.width=7, fig.align="center"}
+Seurat::Idents(celegans) <- "embryo.time.bin"
+p1 <- DimPlot(celegans)
+print(p1)
+```
+
+```{r, warning=FALSE, message=FALSE}
+# overwrite NA in cell.type + add embryo.time.bin x cell.type
+celegans@meta.data$cell.type[is.na(celegans@meta.data$cell.type)] <- "notClassified"
+celegans@meta.data["embryo.time.bin.cell.type"] <- paste0(
+    unlist(celegans@meta.data["embryo.time.bin"]),
+    "-",
+    unlist(celegans@meta.data["cell.type"]))
+
+# load Caenorhabditis elegans gene age estimation
+celegans_ps <- readr::read_tsv(file = system.file("extdata",
+    "Sun2021_Orthomap.tsv", package = "scTEI"))
+table(celegans_ps$Phylostratum)
+
+# define Phylostratum
+ps_vec <- setNames(as.numeric(celegans_ps$Phylostratum),
+    celegans_ps$GeneID)
+```
+
+```{r}
+# add TEI values
+celegans@meta.data["TEI"] <- TEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = ps_vec
+)
+```
+
+```
+## Use multiple threads to calculate TEI on sparseMatrix
+
+celegans@meta.data["TEI"] <- TEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = ps_vec,
+    split = 1000,
+    threads = 2)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make FeaturePlot
+p2 <- FeaturePlot(
+    object = celegans,
+    features = "TEI",
+    min.cutoff='q05',
+    max.cutoff='q95',
+    cols = viridis(3))
+print(p2)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make RidgePlot
+p3 <- RidgePlot(object = celegans,
+    features = "TEI",
+    group.by = "embryo.time.bin")
+print(p3)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make RidgePlot by cell type
+Seurat::Idents(celegans) <- "cell.type"
+p4 <- RidgePlot(object = celegans,
+    features = "TEI",
+    group.by = "cell.type") +
+    Seurat::NoLegend()
+print(p4)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# subset to specific cell type - ADF + notClassified
+ADF <- subset(celegans,
+    cells = c(grep("ADF",
+        celegans@meta.data$cell.type),
+    grep("notClassified",
+         celegans@meta.data$cell.type)))
+p5 <- DimPlot(object = ADF)
+Seurat::Idents(ADF) <- "embryo.time.bin"
+p6 <- DimPlot(object = ADF)
+p7 <- RidgePlot(ADF, "TEI")
+Seurat::Idents(ADF) <- "embryo.time.bin.cell.type"
+p8 <- RidgePlot(object = ADF, features = "TEI") +
+    Seurat::NoLegend()
+
+# make grid plot
+print(plot_grid(p5, p6))
+print(plot_grid(p7, p8))
+```
+
+```{r}
+# use pMatrix as data to cluster
+celegans.TEI <- Seurat::CreateSeuratObject(counts = celegans@assays$RNA@counts,
+    meta.data = celegans@meta.data, row.names = rownames(celegans@assays$RNA@counts))
+celegans.TEI@assays$RNA@data <- pMatrixTEI(
+    ExpressionSet = celegans.TEI@assays$RNA@counts,
+    Phylostratum = ps_vec
+)
+all.genes <- rownames(celegans.TEI@assays$RNA@data)
+celegans.TEI <- Seurat::FindVariableFeatures(
+    celegans.TEI,
+    selection.method = "vst",
+    nfeatures = 2000) %>%
+    Seurat::ScaleData(do.scale = FALSE, do.center = FALSE,
+    features = all.genes) %>%
+    Seurat::RunPCA(dims=50) %>%
+    Seurat::RunUMAP(dims = 1:20)
+```
+
+```
+## Use multiple threads to calculate pMatrix
+
+celegans.TEI@assays$RNA@data <- pMatrixTEI(
+    ExpressionSet = celegans.TEI@assays$RNA@counts,
+    Phylostratum = ps_vec,
+    split = 1000,
+    threads = 2)
+```
+
+```{r, fig.width=7, fig.align="center"}
+Seurat::Idents(celegans.TEI) <- "embryo.time.bin"
+p9 <- DimPlot(celegans.TEI)
+print(p9)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make FeaturePlot
+p10 <- FeaturePlot(
+    object = celegans.TEI,
+    features = "TEI",
+    min.cutoff='q05',
+    max.cutoff='q95',
+    cols = viridis(3))
+print(p10)
+```
+
+```{r, fig.width=7, fig.align="center"}
+Seurat::Idents(celegans) <- "cell.type"
+p11 <- DimPlot(celegans)
+Seurat::Idents(celegans.TEI) <- "cell.type"
+p12 <- DimPlot(celegans.TEI)
+# make grid plot
+print(plot_grid(p2, p11))
+print(plot_grid(p10, p12))
+```
+
+```{r}
+# get TEI per strata
+pS <- pStrataTEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = ps_vec
+)
+```
+
+```
+## Use multiple threads to calculate pStrata
+
+pS <- pStrataTEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = 
+        setNames(as.numeric(celegans_ps$Phylostratum),
+        celegans_ps$GeneID),
+    split = 1000,
+    threads = 2)
+```
+
+```{r}
+# get permutations
+bM <- bootTEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = ps_vec,
+    permutations = 100
+)
+```
+
+```
+## Use multiple threads to get permutations
+
+bM <- bootTEI(
+    ExpressionSet = celegans@assays$RNA@counts,
+    Phylostratum = ps_vec,
+    permutations = 100,
+    split = 1000,
+    threads = 2
+)
+```
+
+```{r}
+# get mean expression matrix
+meanMatrix <- REMatrix(
+    ExpressionSet = celegans@assays$RNA@data,
+    Phylostratum = ps_vec
+)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# get mean expression matrix with groups
+cell_groups <- setNames(
+    lapply(names(table(celegans@meta.data$cell.type)),
+        function(x){which(celegans@meta.data$cell.type==x)}),
+    names(table(celegans@meta.data$cell.type))
+)
+meanMatrix_by_cell.type <- REMatrix(
+    ExpressionSet = celegans@assays$RNA@scale.data,
+    Phylostratum = ps_vec,
+    groups = cell_groups
+)
+ComplexHeatmap::Heatmap(meanMatrix_by_cell.type,
+    cluster_rows = FALSE, cluster_columns = FALSE,
+    col = viridis::viridis(3))
+```
+
+```{r, fig.width=7, fig.align="center"}
+# computing relative expression profile over cell types
+cell_groups <- setNames(
+    lapply(names(table(celegans@meta.data$cell.type)),
+        function(x){which(celegans@meta.data$cell.type==x)}),
+    names(table(celegans@meta.data$cell.type))
+)
+reMatrix_by_cell.type <- REMatrix(
+    ExpressionSet = celegans@assays$RNA@scale.data,
+    Phylostratum = ps_vec,
+    groups = cell_groups,
+    by = "row"
+)
+ComplexHeatmap::Heatmap(reMatrix_by_cell.type,
+    cluster_rows = FALSE)
+```
+
+
+# Monocle3 - example
+
+For `Monocle3`, we again use scRNA data obtained from [@packer2019lineage] for
+the model organism _Caenorhabditis elegans_ [@packer2019lineage] and
+phylogenetic data obtained from [@sun2021single]
+(Sun2021_Supplemental_Table_S6).
+
+## Example: 6k C. elegans embryos from Packer and Zhu et al (2019)
+
+```{r}
+# load Packer and Zhu et al (2019) data set
+expression_matrix <- readRDS(
+    url(
+    paste0("http://staff.washington.edu/hpliner/data/",
+    "packer_embryo_expression.rds")
+    )
+)
+cell_metadata <- readRDS(
+    url(
+    paste0("http://staff.washington.edu/hpliner/data/",
+    "packer_embryo_colData.rds")
+    )
+)
+gene_annotation <- readRDS(
+    url(
+    paste0("http://staff.washington.edu/hpliner/data/",
+    "packer_embryo_rowData.rds")
+    )
+)
+cds <- new_cell_data_set(
+    expression_data = expression_matrix,
+    cell_metadata = cell_metadata,
+    gene_metadata = gene_annotation
+)
+```
+
+```{r, warning=FALSE, message=FALSE}
+# preprocess scRNA
+cds <- preprocess_cds(cds, num_dim = 50)
+cds <- align_cds(cds, alignment_group = "batch",
+    residual_model_formula_str = "~ bg.300.loading +
+        bg.400.loading + bg.500.1.loading + bg.500.2.loading +
+        bg.r17.loading + bg.b01.loading + bg.b02.loading")
+cds <- reduce_dimension(cds)
+cds <- cluster_cells(cds)
+cds <- learn_graph(cds)
+```
+
+```{r, warning=FALSE, message=FALSE, fig.width=7, fig.align="center"}
+p1 <- plot_cells(cds,
+    label_groups_by_cluster=FALSE,
+    color_cells_by = "embryo.time.bin",
+    group_label_size = 5,
+    label_cell_groups = FALSE,
+    label_leaves = TRUE,
+    label_branch_points = TRUE,
+    graph_label_size=1.5)
+print(p1)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# order cells - select youngest time point according to embryo.time
+# - center of the plot
+cds <- order_cells(cds,
+    root_cells = colnames(cds)[which(
+    colData(cds)$embryo.time == min(colData(cds)$embryo.time))])
+colData(cds)["pseudotime"] <- pseudotime(cds)
+
+# plot by pseudotime
+p2 <- plot_cells(cds,
+    label_groups_by_cluster=FALSE,
+    color_cells_by = "pseudotime",
+    group_label_size = 5,
+    label_cell_groups = FALSE,
+    label_leaves = TRUE,
+    label_branch_points = TRUE,
+    graph_label_size=1.5)
+print(p2)
+```
+
+```{r}
+# load Caenorhabditis elegans gene age estimation
+celegans_ps <- readr::read_tsv(file = system.file("extdata",
+    "Sun2021_Orthomap.tsv", package = "scTEI"))
+table(celegans_ps$Phylostratum)
+
+# define Phylostratum
+ps_vec <- setNames(as.numeric(celegans_ps$Phylostratum),
+    celegans_ps$GeneID)
+```
+
+```{r}
+# add TEI values
+colData(cds)["TEI"] <- TEI(
+    ExpressionSet = counts(cds),
+    Phylostratum = ps_vec
+        )
+```
+
+```
+## Use multiple threads to calculate TEI on sparseMatrix
+
+colData(cds)["TEI"] <- TEI(ExpressionSet = counts(cds),
+    Phylostratum = 
+        setNames(as.numeric(celegans_ps$Phylostratum),
+        celegans_ps$GeneID),
+    split = 1000,
+    threads = 2)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make FeaturePlot
+p3 <- plot_cells(cds,
+    label_groups_by_cluster=FALSE,
+    color_cells_by = "TEI",
+    group_label_size = 5,
+    label_cell_groups = FALSE,
+    label_leaves = TRUE,
+    label_branch_points = TRUE,
+    graph_label_size=1.5,
+    cell_size = 1)
+print(p3)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make Boxplot
+p4 <- ggplot2::ggplot(data.frame(colData(cds)),
+    aes(x=embryo.time.bin, y=TEI, fill=embryo.time.bin)) +
+    geom_violin() +
+    geom_boxplot(width=0.1)
+print(p4)
+```
+
+```{r, fig.width=7, fig.align="center"}
+# make scatter plot - TEI vs pseudotime
+p5 <- ggplot(data.frame(colData(cds)),
+    aes(x=pseudotime, y=TEI, col=pseudotime)) +
+    geom_point()
+print(p5)
+p6 <- ggplot(data.frame(colData(cds)),
+    aes(x=pseudotime, y=TEI, col=embryo.time.bin)) +
+    geom_point()
+print(p6)
+```
+
+```{r, fig.width=7, fig.height=7, fig.align="center"}
+# make grid plot
+print(plot_grid(p1, p2, p3, p4))
+```
+
+# References
+
+<div id="refs"></div>
+
+# Session Info
+
+```{r sessionInfo, echo=TRUE}
+sessionInfo()
+```
