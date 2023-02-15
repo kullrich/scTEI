@@ -15,6 +15,16 @@ a named list by identity class and corresponding cells
 \description{
 This function get a named list of cell identity classes.
 }
+\examples{
+
+## get Seurat object
+celegans<-readRDS(file=system.file("extdata",
+    "celegans.embryo.SeuratData.rds", package="scTEI")
+)
+
+cell_groups<-Ident2cellList(Idents(celegans))
+cell_groups
+}
 \author{
 Kristian K Ullrich
 }

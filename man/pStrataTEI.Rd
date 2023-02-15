@@ -7,6 +7,8 @@
 pStrataTEI(
   ExpressionSet,
   Phylostratum = NULL,
+  by = NULL,
+  groups = NULL,
   split = 1e+05,
   showprogress = TRUE,
   threads = 1
@@ -18,6 +20,12 @@ or standard PhyloExpressionSet object.}
 
 \item{Phylostratum}{a named vector representing phylostratum per GeneID with
 names as GeneID (not used if Expression is PhyloExpressionSet).}
+
+\item{by}{specify min/max transformation by row (stages, cells, celltypes)
+or by column (phylostratum)}
+
+\item{groups}{specify stages or cells to be grouped into celltypes
+by a named list}
 
 \item{split}{specify number of columns to split}
 
@@ -49,12 +57,88 @@ strata to the global \code{\link{TEI}} pattern.
 }
 \examples{
 
-# reading a standard PhyloExpressionSet
-data(PhyloExpressionSetExample, package = "myTAI")
+## get Seurat object
+celegans<-readRDS(file=system.file("extdata",
+    "celegans.embryo.SeuratData.rds", package="scTEI")
+)
 
-# computing partial TEI contribution per gene
-pS <- pStrataTEI(PhyloExpressionSetExample)
+## load Caenorhabditis elegans gene age estimation
+celegans_ps<-readr::read_tsv(
+   file=system.file("extdata",
+   "Sun2021_Orthomap.tsv", package="scTEI")
+)
 
+## define Phylostratum
+ps_vec<-setNames(
+    as.numeric(celegans_ps$Phylostratum),
+    celegans_ps$GeneID
+)
+
+## get partial TEI strata values
+Seurat::Idents(celegans)<-"embryo.time.bin"
+pSt<-pStrataTEI(
+    ExpressionSet=celegans@assays$RNA@counts,
+    Phylostratum=ps_vec
+)
+
+## get partial TEI strata values per cell group
+Seurat::Idents(celegans)<-"embryo.time.bin"
+cell_groups<-Ident2cellList(Idents(celegans))
+pSt<-pStrataTEI(
+   ExpressionSet=celegans@assays$RNA@counts,
+   Phylostratum=ps_vec,
+   groups=cell_groups
+)
+p1<-ComplexHeatmap::Heatmap(
+    pSt,
+    name="pSt",
+    column_title="partial TEI values - cell groups",
+    row_title="More Recent <<< More Ancient",
+    cluster_rows=FALSE,
+    cluster_columns=FALSE,
+    col=viridis::viridis(3)
+)
+p1
+
+## get relative expression over stages per cell group
+Seurat::Idents(celegans)<-"embryo.time.bin"
+cell_groups<-Ident2cellList(Idents(celegans))
+pSt<-pStrataTEI(
+   ExpressionSet=celegans@assays$RNA@counts,
+   Phylostratum=ps_vec,
+   groups=cell_groups,
+   by="row"
+)
+p2<-ComplexHeatmap::Heatmap(
+    pSt,
+    name="pSt",
+    column_title="partial TEI values - cell groups - by row",
+    row_title="More Recent <<< More Ancient",
+    cluster_rows=FALSE,
+    cluster_columns=FALSE,
+    col=viridis::viridis(3)
+)
+p2
+
+## get relative expression over phylostrata per cell group
+Seurat::Idents(celegans)<-"embryo.time.bin"
+cell_groups<-Ident2cellList(Idents(celegans))
+pSt<-pStrataTEI(
+   ExpressionSet=celegans@assays$RNA@counts,
+   Phylostratum=ps_vec,
+   groups=cell_groups,
+   by="column"
+)
+p3<-ComplexHeatmap::Heatmap(
+    pSt,
+    name="pSt",
+    column_title="partial TEI values - cell groups - by col",
+    row_title="More Recent <<< More Ancient",
+    cluster_rows=FALSE,
+    cluster_columns=FALSE,
+    col=viridis::viridis(3)
+)
+p3
 }
 \references{
 Domazet-Loso T. and Tautz D. (2010).

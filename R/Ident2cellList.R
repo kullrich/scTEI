@@ -5,7 +5,13 @@
 #' @return a named list by identity class and corresponding cells
 #' @examples
 #'
-#'
+#' ## get Seurat object
+#' celegans<-readRDS(file=system.file("extdata",
+#'     "celegans.embryo.SeuratData.rds", package="scTEI")
+#' )
+#' 
+#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups
 #' @export Ident2cellList
 #' @author Kristian K Ullrich
 

@@ -65,22 +65,88 @@
 #'
 #' @examples
 #'
-#' # reading a standard PhyloExpressionSet
-#' data(PhyloExpressionSetExample, package="myTAI")
+#' ## get Seurat object
+#' celegans<-readRDS(file=system.file("extdata",
+#'     "celegans.embryo.SeuratData.rds", package="scTEI")
+#' )
 #'
-#' # get mean expression
-#' REMatrix(PhyloExpressionSetExample)
+#' ## load Caenorhabditis elegans gene age estimation
+#' celegans_ps<-readr::read_tsv(
+#'    file=system.file("extdata",
+#'    "Sun2021_Orthomap.tsv", package="scTEI")
+#' )
 #'
-#' # computing relative expression profile over stages
-#' REMatrix(PhyloExpressionSetExample, by="row")
+#' ## define Phylostratum
+#' ps_vec<-setNames(
+#'     as.numeric(celegans_ps$Phylostratum),
+#'     celegans_ps$GeneID
+#' )
 #'
-#' # computing relative expression profile over stages with groups
-#' groups<-setNames(list(c("Zygote","Quadrant"),c("Heart","Torpedo")),
-#'     c("A","B"))
-#' REMatrix(PhyloExpressionSetExample, by="row", groups=groups)
+#' ## get relative expression
+#' Seurat::Idents(celegans)<-"embryo.time.bin"
+#' reM<-REMatrix(
+#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    Phylostratum=ps_vec
+#' )
 #'
-#' # computing relative expression profile over phylostrata
-#' REMatrix(PhyloExpressionSetExample, by="column")
+#' ## get relative expression per cell group
+#' Seurat::Idents(celegans)<-"embryo.time.bin"
+#' cell_groups<-Ident2cellList(Idents(celegans))
+#' reM<-REMatrix(
+#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    Phylostratum=ps_vec,
+#'    groups=cell_groups
+#' )
+#' p1<-ComplexHeatmap::Heatmap(
+#'     reM,
+#'     name="RExp",
+#'     column_title="Relative Expression Profile - cell groups",
+#'     row_title="More Recent <<< More Ancient",
+#'     cluster_rows=FALSE,
+#'     cluster_columns=FALSE,
+#'     col=viridis::viridis(3)
+#' )
+#' p1
+#' 
+#' ## get relative expression over stages per cell group
+#' Seurat::Idents(celegans)<-"embryo.time.bin"
+#' cell_groups<-Ident2cellList(Idents(celegans))
+#' reM<-REMatrix(
+#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    Phylostratum=ps_vec,
+#'    groups=cell_groups,
+#'    by="row"
+#' )
+#' p2<-ComplexHeatmap::Heatmap(
+#'     reM,
+#'     name="RExp",
+#'     column_title="Relative Expression Profile - cell groups - by row",
+#'     row_title="More Recent <<< More Ancient",
+#'     cluster_rows=FALSE,
+#'     cluster_columns=FALSE,
+#'     col=viridis::viridis(3)
+#' )
+#' p2
+#'
+#' ## get relative expression over phylostrata per cell group
+#' Seurat::Idents(celegans)<-"embryo.time.bin"
+#' cell_groups<-Ident2cellList(Idents(celegans))
+#' reM<-REMatrix(
+#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    Phylostratum=ps_vec,
+#'    groups=cell_groups,
+#'    by="column"
+#' )
+#' p3<-ComplexHeatmap::Heatmap(
+#'     reM,
+#'     name="RExp",
+#'     column_title="Relative Expression Profile - cell groups - by col",
+#'     row_title="More Recent <<< More Ancient",
+#'     cluster_rows=FALSE,
+#'     cluster_columns=FALSE,
+#'     col=viridis::viridis(3)
+#' )
+#' p3
 #' @export REMatrix
 #' @author Kristian K Ullrich
 

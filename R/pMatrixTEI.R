@@ -36,12 +36,29 @@
 #'
 #' @examples
 #'
-#' # reading a standard PhyloExpressionSet
-#' data(PhyloExpressionSetExample, package="myTAI")
+#' ## get Seurat object
+#' celegans<-readRDS(file=system.file("extdata",
+#'     "celegans.embryo.SeuratData.rds", package="scTEI")
+#' )
 #'
-#' # computing partial TEI contribution per gene
-#' pMatrixTEI(PhyloExpressionSetExample)
+#' ## load Caenorhabditis elegans gene age estimation
+#' celegans_ps<-readr::read_tsv(
+#'    file=system.file("extdata",
+#'    "Sun2021_Orthomap.tsv", package="scTEI")
+#' )
 #'
+#' ## define Phylostratum
+#' ps_vec< setNames(
+#'     as.numeric(celegans_ps$Phylostratum),
+#'     celegans_ps$GeneID
+#' )
+#' 
+#' ## get partial TEI values
+#' Seurat::Idents(celegans)<-"embryo.time.bin"
+#' pM<-pMatrixTEI(
+#'     ExpressionSet=celegans@assays$RNA@counts,
+#'     Phylostratum=ps_vec
+#' )
 #' @export pMatrixTEI
 #' @author Kristian K Ullrich
 
