@@ -83,6 +83,7 @@ sudo yum install libcurl-devel openssl-devel libxml2-devel mesa-libGLU-devel lib
 - [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)
 - [SeuratData](https://cran.r-project.org/web/packages/SeuratData/index.html)
 - [myTAI](https://cran.r-project.org/web/packages/myTAI/index.html)
+- [magick](https://cran.r-project.org/web/packages/magick/index.html)
 
 ```
 install.packages("Rcpp")
@@ -98,6 +99,7 @@ install.packages("cowplot")
 install.packages("Seurat")
 install.packages("SeuratData")
 install.packages("myTAI")
+install.packages("magick")
 ```
 
 ### install packages from [Bioconductor](https://www.bioconductor.org/)
