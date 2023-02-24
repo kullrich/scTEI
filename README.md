@@ -44,6 +44,12 @@ see also here for the R package pages [https://github.com/kullrich/scTEI](https:
 
 ## R specific installation prerequisites
 
+### install archived packages from cran, namely `Matrix.utils`
+
+```
+install.packages("https://cran.r-project.org/src/contrib/Archive/Matrix.utils/Matrix.utils_0.9.8.tar.gz", type="source", repos=NULL)
+```
+
 ### install packages from [cran](https://cran.r-project.org/web/packages/index.html)
 
 In most cases you need to first install the following system-wide packages to be able to compile the R dependencies.
@@ -76,7 +82,6 @@ sudo yum install libcurl-devel openssl-devel libxml2-devel mesa-libGLU-devel lib
 - [cowplot](https://cran.r-project.org/web/packages/cowplot/index.html)
 - [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)
 - [SeuratData](https://cran.r-project.org/web/packages/SeuratData/index.html)
-- [Matrix.utils](https://cran.r-project.org/web/packages/Matrix.utils/index.html)
 - [myTAI](https://cran.r-project.org/web/packages/myTAI/index.html)
 
 ```
@@ -92,7 +97,6 @@ install.packages("viridis")
 install.packages("cowplot")
 install.packages("Seurat")
 install.packages("SeuratData")
-install.packages("Matrix.utils")
 install.packages("myTAI")
 ```
 
