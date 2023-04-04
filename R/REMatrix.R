@@ -191,7 +191,6 @@ REMatrix <- function(ExpressionSet,
                 es<-ExpressionSet[,split_start[i]:split_end[i]]
                 es<-es[rownames(es) %in% common_ids,,drop=FALSE]
                 es<-es[order(rownames(es)), ]
-                es<-ExpressionSet[,split_start[i]:split_end[i]]
                 es_meanMatrix<-as(
                     rcpp_meanMatrix_parallel(es, Phylostratum,
                     PhylostratumGroups, threads), "sparseMatrix")

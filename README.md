@@ -59,7 +59,7 @@ Ubuntu/Debian
 ```
 sudo apt-get install libcurl4-openssl-dev libssl-dev libxml2-dev libglu1-mesa-dev libgit2-dev
 #pkgdown dependencies - pkgdown is used to build R package pages
-#sudo apt-get install libssh2-1-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev
+#sudo apt-get install libssh2-1-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 ```
 
 CentOS
@@ -67,7 +67,7 @@ CentOS
 ```
 sudo yum install libcurl-devel openssl-devel libxml2-devel mesa-libGLU-devel libgit2-devel
 #pkgdown dependencies - pkgdown is used to build R package pages
-#sudo yum install libssh2-devel fontconfig-devel harfbuzz-devel fribidi-devel
+#sudo yum install libssh2-devel fontconfig-devel harfbuzz-devel fribidi-devel freetype-devel libpng-devel libtiff-devel libjpeg-turbo-devel
 ```
 
 - [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
