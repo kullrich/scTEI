@@ -166,7 +166,10 @@ package.
 ```{r, warning=FALSE, message=FALSE}
 # load Packer and Zhu et al (2019) data set
 SeuratData::InstallData("celegans.embryo.SeuratData")
-celegans <- SeuratData::LoadData("celegans.embryo")
+library(celegans.embryo.SeuratData)
+data("celegans.embryo")
+celegans <- UpdateSeuratObject(celegans.embryo)
+#celegans <- SeuratData::LoadData("celegans.embryo")
 dim(celegans)
 head(rownames(celegans))
 ```
@@ -278,13 +281,29 @@ print(plot_grid(p7, p8))
 
 ```{r}
 # use pMatrix as data to cluster
+
+# Seurat v4
+
+#celegans.TEI <- Seurat::CreateSeuratObject(counts = celegans@assays$RNA@counts,
+#    meta.data = celegans@meta.data, row.names = rownames(celegans@assays$RNA@counts))
+#celegans.TEI@assays$RNA@data <- pMatrixTEI(
+#    ExpressionSet = celegans.TEI@assays$RNA@counts,
+#    Phylostratum = ps_vec
+#)
+
+# Seurat v5
+
 celegans.TEI <- Seurat::CreateSeuratObject(counts = celegans@assays$RNA@counts,
-    meta.data = celegans@meta.data, row.names = rownames(celegans@assays$RNA@counts))
-celegans.TEI@assays$RNA@data <- pMatrixTEI(
-    ExpressionSet = celegans.TEI@assays$RNA@counts,
-    Phylostratum = ps_vec
+    meta.data = celegans@meta.data)
+celegans.TEI <- SetAssayData(
+    object = celegans.TEI,
+    layer = "data",
+    new.data = pMatrixTEI(
+        ExpressionSet = GetAssayData(celegans.TEI, layer = "counts"),
+        Phylostratum = ps_vec
+    )
 )
-all.genes <- rownames(celegans.TEI@assays$RNA@data)
+all.genes <- rownames(GetAssayData(celegans.TEI, layer = "data"))
 celegans.TEI <- Seurat::FindVariableFeatures(
     celegans.TEI,
     selection.method = "vst",
@@ -298,11 +317,26 @@ celegans.TEI <- Seurat::FindVariableFeatures(
 ```
 ## Use multiple threads to calculate pMatrix
 
-celegans.TEI@assays$RNA@data <- pMatrixTEI(
-    ExpressionSet = celegans.TEI@assays$RNA@counts,
-    Phylostratum = ps_vec,
-    split = 1000,
-    threads = 2)
+# Seurat v4
+
+#celegans.TEI@assays$RNA@data <- pMatrixTEI(
+#    ExpressionSet = celegans.TEI@assays$RNA@counts,
+#    Phylostratum = ps_vec,
+#    split = 1000,
+#    threads = 2)
+
+# Seurat v5
+
+celegans.TEI <- SetAssayData(
+    object = celegans.TEI,
+    layer = "data",
+    new.data = pMatrixTEI(
+        ExpressionSet = GetAssayData(celegans.TEI, layer = "counts"),
+        Phylostratum = ps_vec,
+        split = 1000,
+        threads = 2
+    )
+)
 ```
 
 ```{r, fig.width=7, fig.align="center"}
@@ -335,7 +369,7 @@ print(plot_grid(p10, p12))
 ```{r}
 # get TEI per strata
 pS <- pStrataTEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
     Phylostratum = ps_vec
 )
 ```
@@ -343,8 +377,20 @@ pS <- pStrataTEI(
 ```
 ## Use multiple threads to calculate pStrata
 
+# Seurat v4
+
+#pS <- pStrataTEI(
+#    ExpressionSet = celegans@assays$RNA@counts,
+#    Phylostratum = 
+#        setNames(as.numeric(celegans_ps$Phylostratum),
+#        celegans_ps$GeneID),
+#    split = 1000,
+#    threads = 2)
+
+# Seurat v5
+
 pS <- pStrataTEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
     Phylostratum = 
         setNames(as.numeric(celegans_ps$Phylostratum),
         celegans_ps$GeneID),
@@ -354,8 +400,19 @@ pS <- pStrataTEI(
 
 ```{r}
 # get permutations
+
+# Seurat v4
+
+#bM <- bootTEI(
+#    ExpressionSet = celegans@assays$RNA@counts,
+#    Phylostratum = ps_vec,
+#    permutations = 100
+#)
+
+# Seurat v5
+
 bM <- bootTEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
     Phylostratum = ps_vec,
     permutations = 100
 )
@@ -364,8 +421,20 @@ bM <- bootTEI(
 ```
 ## Use multiple threads to get permutations
 
+# Seurat v4
+
+#bM <- bootTEI(
+#    ExpressionSet = celegans@assays$RNA@counts,
+#    Phylostratum = ps_vec,
+#    permutations = 100,
+#    split = 1000,
+#    threads = 2
+#)
+
+# Seurat v5
+
 bM <- bootTEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
     Phylostratum = ps_vec,
     permutations = 100,
     split = 1000,
@@ -375,24 +444,47 @@ bM <- bootTEI(
 
 ```{r}
 # get mean expression matrix
+
+# Seurat v4
+
+#meanMatrix <- REMatrix(
+#    ExpressionSet = celegans@assays$RNA@data,
+#    Phylostratum = ps_vec
+#)
+
+# Seurat v5
+
 meanMatrix <- REMatrix(
-    ExpressionSet = celegans@assays$RNA@data,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "data"),
     Phylostratum = ps_vec
 )
 ```
 
 ```{r, fig.width=7, fig.align="center"}
 # get mean expression matrix with groups
+
 cell_groups <- setNames(
     lapply(names(table(celegans@meta.data$cell.type)),
         function(x){which(celegans@meta.data$cell.type==x)}),
     names(table(celegans@meta.data$cell.type))
 )
+
+# Seurat v4
+
+#meanMatrix_by_cell.type <- REMatrix(
+#    ExpressionSet = celegans@assays$RNA@scale.data,
+#    Phylostratum = ps_vec,
+#    groups = cell_groups
+#)
+
+# Seurat v5
+
 meanMatrix_by_cell.type <- REMatrix(
-    ExpressionSet = celegans@assays$RNA@scale.data,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "scale.data"),
     Phylostratum = ps_vec,
     groups = cell_groups
 )
+
 ComplexHeatmap::Heatmap(meanMatrix_by_cell.type,
     cluster_rows = FALSE, cluster_columns = FALSE,
     col = viridis::viridis(3))
@@ -400,17 +492,31 @@ ComplexHeatmap::Heatmap(meanMatrix_by_cell.type,
 
 ```{r, fig.width=7, fig.align="center"}
 # computing relative expression profile over cell types
+
 cell_groups <- setNames(
     lapply(names(table(celegans@meta.data$cell.type)),
         function(x){which(celegans@meta.data$cell.type==x)}),
     names(table(celegans@meta.data$cell.type))
 )
+
+# Seurat v4
+
+#reMatrix_by_cell.type <- REMatrix(
+#    ExpressionSet = celegans@assays$RNA@scale.data,
+#    Phylostratum = ps_vec,
+#    groups = cell_groups,
+#    by = "row"
+#)
+
+# Seurat v5
+
 reMatrix_by_cell.type <- REMatrix(
-    ExpressionSet = celegans@assays$RNA@scale.data,
+    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "scale.data"),
     Phylostratum = ps_vec,
     groups = cell_groups,
     by = "row"
 )
+
 ComplexHeatmap::Heatmap(reMatrix_by_cell.type,
     cluster_rows = FALSE)
 ```
@@ -427,24 +533,46 @@ phylogenetic data obtained from [@sun2021single]
 
 ```{r}
 # load Packer and Zhu et al (2019) data set
-expression_matrix <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_expression.rds")
-    )
-)
-cell_metadata <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_colData.rds")
-    )
-)
-gene_annotation <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_rowData.rds")
-    )
-)
+
+packer_embryo_expression_path <- system.file("extdata",
+    "packer_embryo_expression.rds",
+    package = "scTEI")
+
+#expression_matrix <- readRDS(
+#    url(
+#    paste0("http://staff.washington.edu/hpliner/data/",
+#    "packer_embryo_expression.rds")
+#    )
+#)
+
+expression_matrix <- readRDS(packer_embryo_expression_path)
+
+packer_embryo_colData_path <- system.file("extdata",
+    "packer_embryo_colData.rds",
+    package = "scTEI")
+
+#cell_metadata <- readRDS(
+#    url(
+#    paste0("http://staff.washington.edu/hpliner/data/",
+#    "packer_embryo_colData.rds")
+#    )
+#)
+
+cell_metadata <- readRDS(packer_embryo_colData_path)
+
+packer_embryo_rowData_path <- system.file("extdata",
+    "packer_embryo_rowData.rds",
+    package = "scTEI")
+
+#gene_annotation <- readRDS(
+#    url(
+#    paste0("http://staff.washington.edu/hpliner/data/",
+#    "packer_embryo_rowData.rds")
+#    )
+#)
+
+gene_annotation <- readRDS(packer_embryo_rowData_path)
+
 cds <- new_cell_data_set(
     expression_data = expression_matrix,
     cell_metadata = cell_metadata,
@@ -512,7 +640,7 @@ ps_vec <- setNames(as.numeric(celegans_ps$Phylostratum),
 colData(cds)["TEI"] <- TEI(
     ExpressionSet = counts(cds),
     Phylostratum = ps_vec
-        )
+)
 ```
 
 ```

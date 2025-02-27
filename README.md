@@ -97,7 +97,7 @@ install.packages("ggplot2")
 install.packages("viridis")
 install.packages("cowplot")
 install.packages("Seurat")
-install.packages("SeuratData")
+#install.packages("SeuratData")
 install.packages("myTAI")
 install.packages("magick")
 ```
@@ -141,6 +141,12 @@ BiocManager::install(
 ```
 devtools::install_github("cole-trapnell-lab/leidenbase")
 devtools::install_github("cole-trapnell-lab/monocle3")
+```
+
+### install [SeuratData](https://github.com/satijalab/seurat-data)
+
+```
+devtools::install_github('satijalab/seurat-data')
 ```
 
 ### install [scTEI](https://github.com/kullrich/scTEI)

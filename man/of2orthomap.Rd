@@ -6,6 +6,17 @@
 \usage{
 of2orthomap(seqname, qt, sl, oc, og)
 }
+\arguments{
+\item{seqname}{sequence name of the query species in OrthoFinder}
+
+\item{qt}{query species taxid}
+
+\item{sl}{species list as <orthofinder name><tab><species taxid>}
+
+\item{oc}{specify OrthoFinder <Orthogroups.GeneCounts.tsv>}
+
+\item{og}{specify OrthoFinder <Orthogroups.tsv>}
+}
 \value{
 orthomap object
 }
