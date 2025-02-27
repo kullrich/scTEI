@@ -6,6 +6,7 @@
 #' @param seurat_assay Seurat assay
 #' @param seurat_reduction Seurat reduction
 #' @importFrom methods slot slot<-
+#' @importFrom Seurat GetAssayData
 #' @return cell data set object
 #' @examples
 #'
@@ -17,7 +18,7 @@
 #' ## re-order meta.data according to cell order
 #' celegans<-orderMetaData(
 #'     seurat_obj=celegans,
-#'     seurat_data=GetAssayData(celegans, assay="RNA", layer="data")
+#'     seurat_data=Seurat::GetAssayData(celegans, assay="RNA", layer="data")
 #' )
 #' 
 #' ## convert into monocle3
@@ -49,7 +50,7 @@ seurat2monocle3 <- function(seurat_obj, seurat_assay, seurat_reduction=NULL){
             loadings <- Seurat::Loadings(seurat_obj@reductions$harmony)
             stdev <- Seurat::Stdev(object=seurat_obj@reductions$harmony)
         }
-        methos::slot(object=cds, name='preprocess_aux')[[
+        methods::slot(object=cds, name='preprocess_aux')[[
             'gene_loadings']] <- loadings
         methods::slot(object=cds, name='preprocess_aux')[[
             'prop_var_expl']] <- stdev

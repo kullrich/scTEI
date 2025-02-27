@@ -13,6 +13,7 @@
 #' @param threads specify number of threads
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
+#' @importFrom Seurat GetAssayData
 #' @details The strata values are sampled and the global \code{\link{TEI}}
 #' is calculated N times.
 #' @return a numeric matrix storing the TEI values based on permuted
@@ -52,7 +53,7 @@
 #' 
 #' ## calculate TEI permutation values
 #' bootTEI(
-#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts")
+#'     ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #'

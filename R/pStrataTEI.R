@@ -26,6 +26,9 @@
 #' @importFrom myTAI is.ExpressionSet
 #' @importFrom ComplexHeatmap Heatmap
 #' @importFrom methods is
+#' @importFrom Seurat Idents GetAssayData
+#' @importFrom readr read_tsv
+#' @importFrom viridis viridis
 #' @details The partial TEI values combined per strata give an overall
 #' impression of the contribution of each
 #' strata to the global \code{\link{TEI}} pattern.
@@ -65,15 +68,15 @@
 #' ## get partial TEI strata values
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' pSt<-pStrataTEI(
-#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'     ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #' 
 #' ## get partial TEI strata values per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups
 #' )
@@ -90,9 +93,9 @@
 #' 
 #' ## get relative expression over stages per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="row"
@@ -110,9 +113,9 @@
 #'
 #' ## get relative expression over phylostrata per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="column"

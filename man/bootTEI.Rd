@@ -64,7 +64,7 @@ ps_vec<-setNames(
 
 ## calculate TEI permutation values
 bootTEI(
-    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts")
+    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum=ps_vec
 )
 

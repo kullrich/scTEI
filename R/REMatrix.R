@@ -49,6 +49,10 @@
 #' @importFrom methods is as
 #' @importFrom utils setTxtProgressBar
 #' @importFrom stats setNames
+#' @importFrom Seurat Idents GetAssayData
+#' @importFrom ComplexHeatmap Heatmap
+#' @importFrom viridis viridis
+#' @importFrom readr read_tsv
 #' @details The partial TEI values combined per strata give an overall
 #' impression of the contribution of each
 #' strata to the global \code{\link{TEI}} pattern.
@@ -88,15 +92,15 @@
 #' ## get relative expression
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' reM<-REMatrix(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec
 #' )
 #'
 #' ## get relative expression per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups
 #' )
@@ -113,9 +117,9 @@
 #' 
 #' ## get relative expression over stages per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="row"
@@ -133,9 +137,9 @@
 #'
 #' ## get relative expression over phylostrata per cell group
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
-#' cell_groups<-Ident2cellList(Idents(celegans))
+#' cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="column"
@@ -220,7 +224,7 @@ REMatrix <- function(ExpressionSet,
     if(methods::is(ExpressionSet, "data.frame") |
        methods::is(ExpressionSet, "tibble")){
         if(myTAI::is.ExpressionSet(ExpressionSet)){
-            Phylostratum<-utils::setNames(ExpressionSet$Phylostratum,
+            Phylostratum<-stats::setNames(ExpressionSet$Phylostratum,
                 ExpressionSet$GeneID)
             PhylostratumGroups<-sort(unique(Phylostratum))
             ExpressionSet<-methods::as(data.matrix(

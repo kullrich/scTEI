@@ -66,7 +66,7 @@ ps_vec< setNames(
 ## get partial TEI values
 Seurat::Idents(celegans)<-"embryo.time.bin"
 pM<-pMatrixTEI(
-    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+    ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum=ps_vec
 )
 }

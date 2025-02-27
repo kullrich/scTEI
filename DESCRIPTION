@@ -23,16 +23,17 @@ Imports:
   myTAI,
   Rcpp (>= 1.0.8.3),
   readr,
-  taxizedb
+  Seurat,
+  stringr,
+  taxizedb,
+  viridis
 Suggests:
   ggplot2,
-  viridis,
   cowplot,
   rmarkdown,
   knitr,
   devtools,
   testthat,
-  Seurat,
   SeuratData,
   Matrix.utils,
   BiocGenerics,
@@ -43,7 +44,6 @@ Suggests:
   SingleCellExperiment,
   SummarizedExperiment,
   batchelor,
-  taxizedb,
   org.Hs.eg.db,
   org.Mm.eg.db,
   BiocStyle

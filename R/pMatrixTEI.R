@@ -19,6 +19,8 @@
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
 #' @importFrom methods is
+#' @importFrom Seurat GetAssayData
+#' @importFrom readr read_tsv
 #' @details The partial TEI matrix can be used to perform different cluster
 #' analyses and also gives an overall impression of the contribution of each
 #' gene to the global \code{\link{TEI}} pattern.
@@ -57,7 +59,7 @@
 #' ## get partial TEI values
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' pM<-pMatrixTEI(
-#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'     ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #' @export pMatrixTEI

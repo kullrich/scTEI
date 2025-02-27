@@ -10,6 +10,7 @@
 #' @importFrom taxizedb taxid2name classification
 #' @importFrom stats setNames
 #' @importFrom readr read_tsv
+#' @importFrom stringr str_split_fixed
 #' @return orthomap object
 #' @examples
 #'

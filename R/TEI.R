@@ -12,6 +12,8 @@
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
 #' @importFrom methods is
+#' @importFrom Seurat Idents GetAssayData
+#' @importFrom readr read_tsv
 #' @details The TEI measure represents the weighted arithmetic mean
 #' (expression levels as weights for the phylostratum value) over all
 #' evolutionary age categories denoted as \emph{phylostra}.
@@ -58,7 +60,7 @@
 #' 
 #' ## add TEI values
 #' celegans@meta.data["TEI"]<-TEI(
-#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
+#'     ExpressionSet=Seurat::GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #'

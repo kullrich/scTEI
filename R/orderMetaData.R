@@ -4,6 +4,7 @@
 #' data.
 #' @param seurat_obj Seurat object
 #' @param seurat_data Seurat data
+#' @importFrom Seurat GetAssayData
 #' @return Seurat object
 #' @examples
 #'
@@ -15,7 +16,7 @@
 #' ## re-order meta.data according to cell order
 #' celegans<-orderMetaData(
 #'     seurat_obj=celegans,
-#'     seurat_data=GetAssayData(celegans, assay="RNA", layer="data")
+#'     seurat_data=Seurat::GetAssayData(celegans, assay="RNA", layer="data")
 #' )
 #' @export orderMetaData
 #' @author Kristian K Ullrich
