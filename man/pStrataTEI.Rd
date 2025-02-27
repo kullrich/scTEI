@@ -77,7 +77,7 @@ ps_vec<-setNames(
 ## get partial TEI strata values
 Seurat::Idents(celegans)<-"embryo.time.bin"
 pSt<-pStrataTEI(
-    ExpressionSet=celegans@assays$RNA@counts,
+    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum=ps_vec
 )
 
@@ -85,7 +85,7 @@ pSt<-pStrataTEI(
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 pSt<-pStrataTEI(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups
 )
@@ -104,7 +104,7 @@ p1
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 pSt<-pStrataTEI(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups,
    by="row"
@@ -124,7 +124,7 @@ p2
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 pSt<-pStrataTEI(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups,
    by="column"

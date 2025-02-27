@@ -17,19 +17,21 @@ LazyData: false
 Depends:
   R (>= 4.2.0)
 Imports:
-  Rcpp (>= 1.0.8.3),
+  ComplexHeatmap,
   Matrix,
+  methods,
+  myTAI,
+  Rcpp (>= 1.0.8.3),
+  readr,
+  taxizedb
+Suggests:
   ggplot2,
   viridis,
   cowplot,
-  ComplexHeatmap,
-  myTAI
-Suggests:
   rmarkdown,
   knitr,
   devtools,
   testthat,
-  readr,
   Seurat,
   SeuratData,
   Matrix.utils,
@@ -41,6 +43,7 @@ Suggests:
   SingleCellExperiment,
   SummarizedExperiment,
   batchelor,
+  taxizedb,
   org.Hs.eg.db,
   org.Mm.eg.db,
   BiocStyle

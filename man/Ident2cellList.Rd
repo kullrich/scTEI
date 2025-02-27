@@ -22,7 +22,7 @@ celegans<-readRDS(file=system.file("extdata",
     "celegans.embryo.SeuratData.rds", package="scTEI")
 )
 
-cell_groups<-Ident2cellList(Idents(celegans))
+cell_groups<-Ident2cellList(Seurat::Idents(celegans))
 cell_groups
 }
 \author{

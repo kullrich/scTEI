@@ -24,6 +24,8 @@
 #' @param threads specify number of threads
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
+#' @importFrom ComplexHeatmap Heatmap
+#' @importFrom methods is
 #' @details The partial TEI values combined per strata give an overall
 #' impression of the contribution of each
 #' strata to the global \code{\link{TEI}} pattern.
@@ -63,7 +65,7 @@
 #' ## get partial TEI strata values
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' pSt<-pStrataTEI(
-#'     ExpressionSet=celegans@assays$RNA@counts,
+#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #' 
@@ -71,7 +73,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups
 #' )
@@ -90,7 +92,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="row"
@@ -110,7 +112,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' pSt<-pStrataTEI(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="column"
@@ -140,7 +142,7 @@ pStrataTEI <- function(ExpressionSet,
         f_max<-max(x)
         return((x-f_min)/(f_max-f_min))
     }
-    if(is(ExpressionSet, "Matrix")){
+    if(methods::is(ExpressionSet, "Matrix")){
         common_ids<-sort(Reduce(intersect, list(rownames(ExpressionSet),
             names(Phylostratum))))
         Phylostratum<-Phylostratum[names(Phylostratum) %in% common_ids]
@@ -192,7 +194,8 @@ pStrataTEI <- function(ExpressionSet,
             rownames(ps)<-PhylostratumGroups
         }
     }
-    if(is(ExpressionSet, "data.frame") | is(ExpressionSet, "tibble")){
+    if(methods::is(ExpressionSet, "data.frame") |
+       methods::is(ExpressionSet, "tibble")){
         if(myTAI::is.ExpressionSet(ExpressionSet)){
             Phylostratum<-setNames(ExpressionSet$Phylostratum,
                 ExpressionSet$GeneID)

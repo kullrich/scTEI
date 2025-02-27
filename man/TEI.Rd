@@ -66,7 +66,7 @@ ps_vec<-setNames(
 
 ## add TEI values
 celegans@meta.data["TEI"]<-TEI(
-    ExpressionSet=celegans@assays$RNA@counts,
+    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum=ps_vec
 )
 

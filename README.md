@@ -81,7 +81,6 @@ sudo yum install libcurl-devel openssl-devel libxml2-devel mesa-libGLU-devel lib
 - [viridis](https://cran.r-project.org/web/packages/viridis/index.html)
 - [cowplot](https://cran.r-project.org/web/packages/cowplot/index.html)
 - [Seurat](https://cran.r-project.org/web/packages/Seurat/index.html)
-- [SeuratData](https://cran.r-project.org/web/packages/SeuratData/index.html)
 - [myTAI](https://cran.r-project.org/web/packages/myTAI/index.html)
 - [magick](https://cran.r-project.org/web/packages/magick/index.html)
 
@@ -97,7 +96,6 @@ install.packages("ggplot2")
 install.packages("viridis")
 install.packages("cowplot")
 install.packages("Seurat")
-#install.packages("SeuratData")
 install.packages("myTAI")
 install.packages("magick")
 ```
@@ -139,6 +137,7 @@ BiocManager::install(
 ### install [monocle3](https://cole-trapnell-lab.github.io/monocle3/docs/installation/)
 
 ```
+devtools::install_github("cvarrichio/Matrix.utils")
 devtools::install_github("cole-trapnell-lab/leidenbase")
 devtools::install_github("cole-trapnell-lab/monocle3")
 ```
@@ -147,6 +146,12 @@ devtools::install_github("cole-trapnell-lab/monocle3")
 
 ```
 devtools::install_github('satijalab/seurat-data')
+```
+
+### install [taxizedb](https://github.com/ropensci/taxizedb)
+
+```
+devtools::install_github("ropensci/taxizedb")
 ```
 
 ### install [scTEI](https://github.com/kullrich/scTEI)
@@ -165,7 +170,9 @@ library(scTEI)
 
 ## get Seurat object
 SeuratData::InstallData("celegans.embryo.SeuratData")
-celegans <- SeuratData::LoadData("celegans.embryo")
+library(celegans.embryo.SeuratData)
+data("celegans.embryo")
+celegans <- UpdateSeuratObject(celegans.embryo)
 
 ## load Caenorhabditis elegans gene age estimation
 celegans_ps <- readr::read_tsv(
@@ -181,13 +188,13 @@ ps_vec <- setNames(
 
 ## add TEI values
 celegans@meta.data["TEI"] <- TEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum = ps_vec
 )
 
 ## Use multiple threads to calculate TEI on sparseMatrix
 #celegans@meta.data["TEI"] <- TEI(
-#    ExpressionSet = celegans@assays$RNA@counts,
+#    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
 #    Phylostratum = ps_vec,
 #    split = 1000,
 #    threads = 2
@@ -225,9 +232,9 @@ p3 <- FeaturePlot(
 cowplot::plot_grid(p2, p3)
 
 ## get relative expression per cell group
-cell_groups <- Ident2cellList(Idents(celegans))
+cell_groups <- Ident2cellList(Seurat::Idents(celegans))
 reM <- REMatrix(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum = ps_vec,
     groups = cell_groups,
     by = "row",
@@ -251,25 +258,22 @@ p4
 library(scTEI)
 
 ## get Monocle3 object
-expression_matrix <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_expression.rds")
-    )
-)
-cell_metadata <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_colData.rds")
-    )
-)
-gene_annotation <- readRDS(
-    url(
-    paste0("http://staff.washington.edu/hpliner/data/",
-    "packer_embryo_rowData.rds")
-    )
-)
-cds <- monocle3::new_cell_data_set(
+packer_embryo_expression_path <- system.file("extdata",
+    "packer_embryo_expression.rds",
+    package="scTEI")
+expression_matrix <- readRDS(packer_embryo_expression_path)
+
+packer_embryo_colData_path <- system.file("extdata",
+    "packer_embryo_colData.rds",
+    package="scTEI")
+cell_metadata <- readRDS(packer_embryo_colData_path)
+
+packer_embryo_rowData_path <- system.file("extdata",
+    "packer_embryo_rowData.rds",
+    package="scTEI")
+gene_annotation <- readRDS(packer_embryo_rowData_path)
+
+cds <- new_cell_data_set(
     expression_data = expression_matrix,
     cell_metadata = cell_metadata,
     gene_metadata = gene_annotation
@@ -278,7 +282,7 @@ cds <- monocle3::new_cell_data_set(
 ## load Caenorhabditis elegans gene age estimation
 celegans_ps <- readr::read_tsv(
     file = system.file("extdata",
-    "Sun2021_Orthomap.tsv", package = "scTEI")
+    "Sun2021_Orthomap.tsv", package="scTEI")
 )
 
 ## define Phylostratum
@@ -378,13 +382,13 @@ hvulgaris <- readRDS(
 ## re-order meta.data according to cell order
 hvulgaris <- orderMetaData(
     seurat_obj = hvulgaris,
-    seurat_data = hvulgaris@assays$SCT@data
+    seurat_data = GetAssayData(hvulgaris, assay="SCT", layer="data")
 )
 
 ## load Hydra vulgaris gene age estimation
 hvulgaris_ps <- readr::read_tsv(
     file = system.file("extdata",
-    "Cazet2022_Orthomap.tsv", package = "scTEI")
+    "Cazet2022_Orthomap.tsv", package="scTEI")
 )
     
 ## define Phylostratum
@@ -395,7 +399,7 @@ ps_vec <- setNames(
 
 ## add TEI values
 hvulgaris@meta.data["TEI"] <- TEI(
-    ExpressionSet = hvulgaris@assays$SCT@data,
+    ExpressionSet = GetAssayData(hvulgaris, assay="SCT", layer="data"),
     Phylostratum = ps_vec,
     split = 1000,
     threads = 2
@@ -422,9 +426,9 @@ p3 <- FeaturePlot(
 p3
 
 ## get relative expression per cell group
-cell_groups <- Ident2cellList(Idents(hvulgaris))
+cell_groups <- Ident2cellList(Seurat::Idents(hvulgaris))
 reM <- REMatrix(
-    ExpressionSet = hvulgaris@assays$SCT@data,
+    ExpressionSet = GetAssayData(hvulgaris, assay="SCT", layer="data"),
     Phylostratum = ps_vec,
     groups = cell_groups,
     by = "row",

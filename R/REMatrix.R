@@ -46,6 +46,9 @@
 #' @param threads specify number of threads
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
+#' @importFrom methods is as
+#' @importFrom utils setTxtProgressBar
+#' @importFrom stats setNames
 #' @details The partial TEI values combined per strata give an overall
 #' impression of the contribution of each
 #' strata to the global \code{\link{TEI}} pattern.
@@ -85,7 +88,7 @@
 #' ## get relative expression
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' reM<-REMatrix(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec
 #' )
 #'
@@ -93,7 +96,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups
 #' )
@@ -112,7 +115,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="row"
@@ -132,7 +135,7 @@
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' cell_groups<-Ident2cellList(Idents(celegans))
 #' reM<-REMatrix(
-#'    ExpressionSet=celegans@assays$RNA@counts,
+#'    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'    Phylostratum=ps_vec,
 #'    groups=cell_groups,
 #'    by="column"
@@ -162,7 +165,7 @@ REMatrix <- function(ExpressionSet,
         f_max<-max(x)
         return((x-f_min)/(f_max-f_min))
     }
-    if(is(ExpressionSet, "Matrix")){
+    if(methods::is(ExpressionSet, "Matrix")){
         common_ids<-sort(Reduce(intersect, list(rownames(ExpressionSet),
             names(Phylostratum))))
         Phylostratum<-Phylostratum[names(Phylostratum) %in% common_ids]
@@ -191,13 +194,13 @@ REMatrix <- function(ExpressionSet,
                 es<-ExpressionSet[,split_start[i]:split_end[i]]
                 es<-es[rownames(es) %in% common_ids,,drop=FALSE]
                 es<-es[order(rownames(es)), ]
-                es_meanMatrix<-as(
+                es_meanMatrix<-methods::as(
                     rcpp_meanMatrix_parallel(es, Phylostratum,
                     PhylostratumGroups, threads), "sparseMatrix")
                 colnames(es_meanMatrix)<-colnames(es)
                 rownames(es_meanMatrix)<-PhylostratumGroups
                 if(showprogress){
-                    setTxtProgressBar(pb, i)
+                    utils::setTxtProgressBar(pb, i)
                 }
                 es<-NULL
                 OUT<-cbind(OUT, es_meanMatrix)
@@ -207,19 +210,20 @@ REMatrix <- function(ExpressionSet,
             ExpressionSet<-ExpressionSet[rownames(ExpressionSet) %in%
                 common_ids,,drop=FALSE]
             ExpressionSet<-ExpressionSet[order(rownames(ExpressionSet)), ]
-            meanMatrix<-as(
+            meanMatrix<-methods::as(
                 rcpp_meanMatrix_parallel(ExpressionSet, Phylostratum,
                 PhylostratumGroups, threads), "sparseMatrix")
             colnames(meanMatrix)<-colnames(ExpressionSet)
             rownames(meanMatrix)<-PhylostratumGroups
         }
     }
-    if(is(ExpressionSet, "data.frame") | is(ExpressionSet, "tibble")){
+    if(methods::is(ExpressionSet, "data.frame") |
+       methods::is(ExpressionSet, "tibble")){
         if(myTAI::is.ExpressionSet(ExpressionSet)){
-            Phylostratum<-setNames(ExpressionSet$Phylostratum,
+            Phylostratum<-utils::setNames(ExpressionSet$Phylostratum,
                 ExpressionSet$GeneID)
             PhylostratumGroups<-sort(unique(Phylostratum))
-            ExpressionSet<-as(data.matrix(
+            ExpressionSet<-methods::as(data.matrix(
                 ExpressionSet[,3:ncol(ExpressionSet)]), "sparseMatrix")
             rownames(ExpressionSet)<-names(Phylostratum)
         }
@@ -244,20 +248,20 @@ REMatrix <- function(ExpressionSet,
             es_meanMatrix<-NULL
             for(i in seq_along(split_start)){
                 es<-ExpressionSet[,split_start[i]:split_end[i]]
-                es_meanMatrix<-as(
+                es_meanMatrix<-methods::as(
                     rcpp_meanMatrix_parallel(es, Phylostratum,
                     PhylostratumGroups, threads), "sparseMatrix")
                 colnames(es_meanMatrix)<-colnames(es)
                 rownames(es_meanMatrix)<-PhylostratumGroups
                 if(showprogress){
-                    setTxtProgressBar(pb, i)
+                    utils::setTxtProgressBar(pb, i)
                 }
                 es<-NULL
                 OUT<-cbind(OUT, es_meanMatrix)
             }
             meanMatrix<-OUT
         }else{
-            meanMatrix<-as(
+            meanMatrix<-methods::as(
                 rcpp_meanMatrix_parallel(ExpressionSet, Phylostratum,
                 PhylostratumGroups, threads), "sparseMatrix")
             colnames(meanMatrix)<-colnames(ExpressionSet)

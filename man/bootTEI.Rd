@@ -45,13 +45,15 @@ is calculated N times.
 
 ## get Seurat object
 celegans<-readRDS(file=system.file("extdata",
-    "celegans.embryo.SeuratData.rds", package="scTEI")
+    "celegans.embryo.SeuratData.rds",
+    package="scTEI")
 )
 
 ## load Caenorhabditis elegans gene age estimation
 celegans_ps<-readr::read_tsv(
    file=system.file("extdata",
-   "Sun2021_Orthomap.tsv", package="scTEI")
+   "Sun2021_Orthomap.tsv",
+   package="scTEI")
 )
 
 ## define Phylostratum
@@ -62,7 +64,7 @@ ps_vec<-setNames(
 
 ## calculate TEI permutation values
 bootTEI(
-    ExpressionSet=celegans@assays$RNA@counts,
+    ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts")
     Phylostratum=ps_vec
 )
 

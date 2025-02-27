@@ -11,6 +11,7 @@
 #' @param threads specify number of threads
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
+#' @importFrom methods is
 #' @details The TEI measure represents the weighted arithmetic mean
 #' (expression levels as weights for the phylostratum value) over all
 #' evolutionary age categories denoted as \emph{phylostra}.
@@ -57,7 +58,7 @@
 #' 
 #' ## add TEI values
 #' celegans@meta.data["TEI"]<-TEI(
-#'     ExpressionSet=celegans@assays$RNA@counts,
+#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #'
@@ -76,7 +77,7 @@ TEI <- function(ExpressionSet,
     split=100000,
     showprogress=TRUE,
     threads=1){
-    if(is(ExpressionSet, "Matrix")){
+    if(methods::is(ExpressionSet, "Matrix")){
         common_ids<-sort(Reduce(intersect, list(rownames(ExpressionSet),
             names(Phylostratum))))
         Phylostratum<-Phylostratum[names(Phylostratum) %in% common_ids]
@@ -123,7 +124,8 @@ TEI <- function(ExpressionSet,
             names(tei)<-colnames(ExpressionSet)
         }
     }
-    if(is(ExpressionSet, "data.frame") | is(ExpressionSet, "tibble")){
+    if(methods::is(ExpressionSet, "data.frame") |
+       methods::is(ExpressionSet, "tibble")){
         if(myTAI::is.ExpressionSet(ExpressionSet)){
             Phylostratum<-setNames(ExpressionSet$Phylostratum,
                 ExpressionSet$GeneID)

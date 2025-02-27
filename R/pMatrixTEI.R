@@ -18,6 +18,7 @@
 #' @param threads specify number of threads
 #' @importFrom utils txtProgressBar
 #' @importFrom myTAI is.ExpressionSet
+#' @importFrom methods is
 #' @details The partial TEI matrix can be used to perform different cluster
 #' analyses and also gives an overall impression of the contribution of each
 #' gene to the global \code{\link{TEI}} pattern.
@@ -56,7 +57,7 @@
 #' ## get partial TEI values
 #' Seurat::Idents(celegans)<-"embryo.time.bin"
 #' pM<-pMatrixTEI(
-#'     ExpressionSet=celegans@assays$RNA@counts,
+#'     ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
 #'     Phylostratum=ps_vec
 #' )
 #' @export pMatrixTEI
@@ -67,7 +68,7 @@ pMatrixTEI <- function(ExpressionSet,
     split=100000,
     showprogress=TRUE,
     threads=1){
-    if(is(ExpressionSet, "Matrix")){
+    if(methods::is(ExpressionSet, "Matrix")){
         common_ids<-sort(Reduce(intersect, list(rownames(ExpressionSet),
             names(Phylostratum))))
         Phylostratum<-Phylostratum[names(Phylostratum) %in% common_ids]
@@ -118,7 +119,8 @@ pMatrixTEI <- function(ExpressionSet,
             rownames(pmt)<-names(Phylostratum)
         }
     }
-    if(is(ExpressionSet, "data.frame") | is(ExpressionSet, "tibble")){
+    if(methods::is(ExpressionSet, "data.frame") |
+       methods::is(ExpressionSet, "tibble")){
         if(myTAI::is.ExpressionSet(ExpressionSet)){
             Phylostratum<-setNames(ExpressionSet$Phylostratum,
                 ExpressionSet$GeneID)

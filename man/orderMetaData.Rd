@@ -28,7 +28,7 @@ celegans<-readRDS(file=system.file("extdata",
 ## re-order meta.data according to cell order
 celegans<-orderMetaData(
     seurat_obj=celegans,
-    seurat_data=celegans@assays$RNA@data
+    seurat_data=GetAssayData(celegans, assay="RNA", layer="data")
 )
 }
 \author{

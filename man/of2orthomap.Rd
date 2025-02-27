@@ -26,23 +26,27 @@ species.
 }
 \examples{
 
-## get Seurat object
-celegans<-readRDS(file=system.file("extdata",
-    "celegans.embryo.SeuratData.rds", package="scTEI")
-)
-
-## re-order meta.data according to cell order
-celegans<-orderMetaData(
-    seurat_obj=celegans,
-    seurat_data=celegans@assays$RNA@data
-)
-
-## convert into monocle3
-celegans_cds<-seurat2monocle3(
-    seurat_obj=celegans,
-    seurat_assay="RNA",
-    seurat_reduction=NULL
-)
+## of2orthomap
+#sl <- tempfile()
+#oc <- tempfile()
+#og <- tempfile()
+#download.file(
+#    url=paste0("https://zenodo.org/records/14911022/files/",
+#               "ensembl_113_orthofinder_last_species_list.tsv"),
+#    destfile=sl)
+#download.file(
+#    url=paste0("https://zenodo.org/records/14911022/files/",
+#               "ensembl_113_orthofinder_last_Orthogroups.GeneCount.tsv.zip"),
+#    destfile=oc)
+#download.file(
+#    url=paste0("https://zenodo.org/records/14911022/files/",
+#               "ensembl_113_orthofinder_last_Orthogroups.tsv.zip"),
+#    destfile=og)
+#query_orthomap <- of2orthomap(seqname="10090.mus_musculus.pep",
+#    qt="10090",
+#    sl=sl,
+#    oc=oc,
+#    og=og)
 }
 \author{
 Kristian K Ullrich

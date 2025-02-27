@@ -99,7 +99,7 @@ ps_vec<-setNames(
 ## get relative expression
 Seurat::Idents(celegans)<-"embryo.time.bin"
 reM<-REMatrix(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec
 )
 
@@ -107,7 +107,7 @@ reM<-REMatrix(
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 reM<-REMatrix(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups
 )
@@ -126,7 +126,7 @@ p1
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 reM<-REMatrix(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups,
    by="row"
@@ -146,7 +146,7 @@ p2
 Seurat::Idents(celegans)<-"embryo.time.bin"
 cell_groups<-Ident2cellList(Idents(celegans))
 reM<-REMatrix(
-   ExpressionSet=celegans@assays$RNA@counts,
+   ExpressionSet=GetAssayData(celegans, assay="RNA", layer="counts"),
    Phylostratum=ps_vec,
    groups=cell_groups,
    by="column"

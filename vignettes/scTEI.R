@@ -59,7 +59,7 @@ ps_vec <- setNames(as.numeric(celegans_ps$Phylostratum),
 ## -----------------------------------------------------------------------------
 # add TEI values
 celegans@meta.data["TEI"] <- TEI(
-    ExpressionSet = celegans@assays$RNA@counts,
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum = ps_vec
 )
 
@@ -122,17 +122,18 @@ print(plot_grid(p7, p8))
 
 # Seurat v5
 
-celegans.TEI <- Seurat::CreateSeuratObject(counts = celegans@assays$RNA@counts,
+celegans.TEI <- Seurat::CreateSeuratObject(
+    counts = GetAssayData(celegans, assay="RNA", layer="counts"),
     meta.data = celegans@meta.data)
 celegans.TEI <- SetAssayData(
     object = celegans.TEI,
     layer = "data",
     new.data = pMatrixTEI(
-        ExpressionSet = GetAssayData(celegans.TEI, layer = "counts"),
+        ExpressionSet = GetAssayData(celegans.TEI, assay="RNA", layer="counts"),
         Phylostratum = ps_vec
     )
 )
-all.genes <- rownames(GetAssayData(celegans.TEI, layer = "data"))
+all.genes <- rownames(GetAssayData(celegans.TEI, assay="RNA", layer="data"))
 celegans.TEI <- Seurat::FindVariableFeatures(
     celegans.TEI,
     selection.method = "vst",
@@ -169,7 +170,7 @@ print(plot_grid(p10, p12))
 ## -----------------------------------------------------------------------------
 # get TEI per strata
 pS <- pStrataTEI(
-    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum = ps_vec
 )
 
@@ -187,7 +188,7 @@ pS <- pStrataTEI(
 # Seurat v5
 
 bM <- bootTEI(
-    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "counts"),
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="counts"),
     Phylostratum = ps_vec,
     permutations = 100
 )
@@ -205,7 +206,7 @@ bM <- bootTEI(
 # Seurat v5
 
 meanMatrix <- REMatrix(
-    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "data"),
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="data"),
     Phylostratum = ps_vec
 )
 
@@ -229,7 +230,7 @@ cell_groups <- setNames(
 # Seurat v5
 
 meanMatrix_by_cell.type <- REMatrix(
-    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "scale.data"),
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="scale.data"),
     Phylostratum = ps_vec,
     groups = cell_groups
 )
@@ -259,7 +260,7 @@ cell_groups <- setNames(
 # Seurat v5
 
 reMatrix_by_cell.type <- REMatrix(
-    ExpressionSet = GetAssayData(celegans, assay = "RNA", layer = "scale.data"),
+    ExpressionSet = GetAssayData(celegans, assay="RNA", layer="scale.data"),
     Phylostratum = ps_vec,
     groups = cell_groups,
     by = "row"
@@ -271,22 +272,12 @@ ComplexHeatmap::Heatmap(reMatrix_by_cell.type,
 ## -----------------------------------------------------------------------------
 # load Packer and Zhu et al (2019) data set
 
-packer_embryo_expression_path <- system.file("extdata",
-    "packer_embryo_expression.rds",
-    package = "scTEI")
-
 #expression_matrix <- readRDS(
 #    url(
 #    paste0("http://staff.washington.edu/hpliner/data/",
 #    "packer_embryo_expression.rds")
 #    )
 #)
-
-expression_matrix <- readRDS(packer_embryo_expression_path)
-
-packer_embryo_colData_path <- system.file("extdata",
-    "packer_embryo_colData.rds",
-    package = "scTEI")
 
 #cell_metadata <- readRDS(
 #    url(
@@ -295,12 +286,6 @@ packer_embryo_colData_path <- system.file("extdata",
 #    )
 #)
 
-cell_metadata <- readRDS(packer_embryo_colData_path)
-
-packer_embryo_rowData_path <- system.file("extdata",
-    "packer_embryo_rowData.rds",
-    package = "scTEI")
-
 #gene_annotation <- readRDS(
 #    url(
 #    paste0("http://staff.washington.edu/hpliner/data/",
@@ -308,6 +293,19 @@ packer_embryo_rowData_path <- system.file("extdata",
 #    )
 #)
 
+packer_embryo_expression_path <- system.file("extdata",
+    "packer_embryo_expression.rds",
+    package = "scTEI")
+expression_matrix <- readRDS(packer_embryo_expression_path)
+
+packer_embryo_colData_path <- system.file("extdata",
+    "packer_embryo_colData.rds",
+    package = "scTEI")
+cell_metadata <- readRDS(packer_embryo_colData_path)
+
+packer_embryo_rowData_path <- system.file("extdata",
+    "packer_embryo_rowData.rds",
+    package = "scTEI")
 gene_annotation <- readRDS(packer_embryo_rowData_path)
 
 cds <- new_cell_data_set(

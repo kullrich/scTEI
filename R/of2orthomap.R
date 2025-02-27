@@ -7,26 +7,33 @@
 #' @param sl species list as <orthofinder name><tab><species taxid>
 #' @param oc specify OrthoFinder <Orthogroups.GeneCounts.tsv>
 #' @param og specify OrthoFinder <Orthogroups.tsv>
+#' @importFrom taxizedb taxid2name classification
+#' @importFrom stats setNames
+#' @importFrom readr read_tsv
 #' @return orthomap object
 #' @examples
 #'
-#' ## get Seurat object
-#' celegans<-readRDS(file=system.file("extdata",
-#'     "celegans.embryo.SeuratData.rds", package="scTEI")
-#' )
-#' 
-#' ## re-order meta.data according to cell order
-#' celegans<-orderMetaData(
-#'     seurat_obj=celegans,
-#'     seurat_data=celegans@assays$RNA@data
-#' )
-#' 
-#' ## convert into monocle3
-#' celegans_cds<-seurat2monocle3(
-#'     seurat_obj=celegans,
-#'     seurat_assay="RNA",
-#'     seurat_reduction=NULL
-#' )
+#' ## of2orthomap
+#' #sl <- tempfile()
+#' #oc <- tempfile()
+#' #og <- tempfile()
+#' #download.file(
+#' #    url=paste0("https://zenodo.org/records/14911022/files/",
+#' #               "ensembl_113_orthofinder_last_species_list.tsv"),
+#' #    destfile=sl)
+#' #download.file(
+#' #    url=paste0("https://zenodo.org/records/14911022/files/",
+#' #               "ensembl_113_orthofinder_last_Orthogroups.GeneCount.tsv.zip"),
+#' #    destfile=oc)
+#' #download.file(
+#' #    url=paste0("https://zenodo.org/records/14911022/files/",
+#' #               "ensembl_113_orthofinder_last_Orthogroups.tsv.zip"),
+#' #    destfile=og)
+#' #query_orthomap <- of2orthomap(seqname="10090.mus_musculus.pep",
+#' #    qt="10090",
+#' #    sl=sl,
+#' #    oc=oc,
+#' #    og=og)
 #' @export of2orthomap
 #' @author Kristian K Ullrich
 
@@ -35,8 +42,8 @@ of2orthomap <- function(seqname, qt, sl, oc, og){
         qt_name <- taxizedb::taxid2name(qt, db="ncbi")
         qlineage <- taxizedb::classification(qt, db="ncbi")
         qlineage_df <- data.frame(PSnum=rownames(qlineage[[1]]),
-                              PStaxID=qlineage[[1]]$id,
-                              PSname=qlineage[[1]]$name)
+            PStaxID=qlineage[[1]]$id,
+            PSname=qlineage[[1]]$name)
         qk <- NULL
         if(qlineage_df$PStaxID[2]=="2"){
             qk <- "Bacteria"
@@ -47,7 +54,7 @@ of2orthomap <- function(seqname, qt, sl, oc, og){
         if(qlineage_df$PStaxID[2]=="2759"){
             qk <- "Eukaryota"
         }
-        out <- setNames(list(qt_name, qt, qlineage, qlineage_df, qk),
+        out <- stats::setNames(list(qt_name, qt, qlineage, qlineage_df, qk),
                         c("qt_name", "qt", "qlineage", "qlineage_df", "qk"))
         return(out)        
     }
