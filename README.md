@@ -44,6 +44,8 @@ see also here for the R package pages [https://github.com/kullrich/scTEI](https:
 
 ## R specific installation prerequisites
 
+__Note:__ `scTEI` now relies on `Seurat` version `>= 5.2.0`, please look carefully at all dependencies.
+
 ### install archived packages from cran, namely `Matrix.utils`
 
 ```
@@ -157,8 +159,7 @@ devtools::install_github("ropensci/taxizedb")
 ### install [scTEI](https://github.com/kullrich/scTEI)
 
 ```
-library(devtools)
-install_github("kullrich/scTEI", build_vignettes = TRUE, dependencies = TRUE)
+devtools::install_github("kullrich/scTEI", build_vignettes=TRUE, dependencies=TRUE)
 ```
 
 ## Quick-guide

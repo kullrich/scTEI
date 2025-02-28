@@ -113,6 +113,7 @@
 <div class="section level2">
 <h2 id="r-specific-installation-prerequisites">R specific installation prerequisites<a class="anchor" aria-label="anchor" href="#r-specific-installation-prerequisites"></a>
 </h2>
+<p><strong>Note:</strong> <code>scTEI</code> now relies on <code>Seurat</code> version <code>&gt;= 5.2.0</code>, please look carefully at all dependencies.</p>
 <div class="section level3">
 <h3 id="install-archived-packages-from-cran-namely-matrixutils">install archived packages from cran, namely <code>Matrix.utils</code>
 <a class="anchor" aria-label="anchor" href="#install-archived-packages-from-cran-namely-matrixutils"></a>
@@ -220,8 +221,7 @@
 <h3 id="install-sctei">install <a href="https://github.com/kullrich/scTEI" class="external-link">scTEI</a>
 <a class="anchor" aria-label="anchor" href="#install-sctei"></a>
 </h3>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"kullrich/scTEI"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"kullrich/scTEI"</span>, build_vignettes<span class="op">=</span><span class="cn">TRUE</span>, dependencies<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">

@@ -24,7 +24,7 @@ Imports:
   myTAI,
   Rcpp (>= 1.0.8.3),
   readr,
-  Seurat,
+  Seurat (>= 5.2.0),
   SingleCellExperiment,
   stringr,
   SummarizedExperiment,
