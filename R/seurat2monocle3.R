@@ -6,7 +6,11 @@
 #' @param seurat_assay Seurat assay
 #' @param seurat_reduction Seurat reduction
 #' @importFrom methods slot slot<-
-#' @importFrom Seurat GetAssayData
+#' @importFrom Seurat GetAssayData as.SingleCellExperiment Loadings Stdev
+#' DefaultAssay
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom SingleCellExperiment reducedDimNames
+#' @importFrom monocle3 estimate_size_factors
 #' @return cell data set object
 #' @examples
 #'

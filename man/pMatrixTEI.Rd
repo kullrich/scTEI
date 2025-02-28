@@ -58,7 +58,7 @@ celegans_ps<-readr::read_tsv(
 )
 
 ## define Phylostratum
-ps_vec< setNames(
+ps_vec<-setNames(
     as.numeric(celegans_ps$Phylostratum),
     celegans_ps$GeneID
 )
