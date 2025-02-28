@@ -3,6 +3,8 @@
 scTEI - add any phylogenetically based transcriptome evolutionary index (TEI) to single-cell data objects
 =====
 
+see also here for the R package pages [https://kullrich.github.io/scTEI/](https://kullrich.github.io/scTEI/)
+
 # Introduction
 
 The goal of `scTEI` is to provide easy functionality to add phylogenetically
@@ -40,7 +42,7 @@ ortho map: Sun et al. 2021
 
 # Installation
 
-see also here for the R package pages [https://github.com/kullrich/scTEI](https://github.com/kullrich/scTEI)
+see also here for the R package pages [https://kullrich.github.io/scTEI/](https://kullrich.github.io/scTEI/)
 
 ## R specific installation prerequisites
 
