@@ -48,6 +48,23 @@ see also here for the R package pages [https://kullrich.github.io/scTEI/](https:
 
 __Note:__ `scTEI` now relies on `Seurat` version `>= 5.2.0`, please look carefully at all dependencies.
 
+__Note:__ If you encounter during vignette building the following error:
+
+```
+function 'as_cholmod_sparse' not provided by package 'Matrix'
+```
+
+Please consider to re-install the `Matrix` and `irlba` package as suggested here:
+
+https://github.com/cole-trapnell-lab/monocle3/issues/690
+
+```
+remove.packages("Matrix")
+remove.packages("irlba")
+install.packages("Matrix", type="source")
+install.packages("irlba", type="source")
+```
+
 ### install archived packages from cran, namely `Matrix.utils`
 
 ```
