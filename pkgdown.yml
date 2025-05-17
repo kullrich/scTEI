@@ -1,0 +1,6 @@
+pandoc: '3.5'
+pkgdown: 2.1.2
+pkgdown_sha: ~
+articles:
+  scTEI: scTEI.html
+last_built: 2025-05-17T23:28Z
