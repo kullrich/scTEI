@@ -59,6 +59,8 @@ LinkingTo:
 VignetteBuilder: knitr
 NeedsCompilation: yes
 SystemRequirements: C++11
-URL: https://github.com/kullrich/scTEI
+URL:
+  https://github.com/kullrich/scTEI
+  https://kullrich.github.io/scTEI/
 BugReports: https://github.com/kullrich/scTEI/issues
 RoxygenNote: 7.3.2
