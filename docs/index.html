@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>add any phylogenetically based transcriptome evolutionary index (TEI) to single-cell data objects • scTEI</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -77,11 +76,14 @@
 <div class="page-header"><h1 id="sctei-">scTEI <a href="https://github.com/kullrich/scTEI" class="external-link"><img src="reference/figures/logo.png" align="right" height="160"></a>
 <a class="anchor" aria-label="anchor" href="#sctei-"></a>
 </h1></div>
+<p><a href="CODE_OF_CONDUCT.html"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg" alt="Contributor Covenant"></a> <a href="https://opensource.org/license/gpl-3-0" class="external-link"><img src="https://img.shields.io/badge/license-GPL3-brightgreen.svg" alt="GPL3license"></a></p>
 </div>
 <div class="section level1">
 <h1 id="sctei---add-any-phylogenetically-based-transcriptome-evolutionary-index-tei-to-single-cell-data-objects">scTEI - add any phylogenetically based transcriptome evolutionary index (TEI) to single-cell data objects<a class="anchor" aria-label="anchor" href="#sctei---add-any-phylogenetically-based-transcriptome-evolutionary-index-tei-to-single-cell-data-objects"></a>
 </h1>
-<p>see also here for the R package pages <a href="https://kullrich.github.io/scTEI/" class="external-link">https://kullrich.github.io/scTEI/</a></p>
+<p>R package source code: <a href="https://github.com/kullrich/scTEI" class="external-link uri">https://github.com/kullrich/scTEI</a></p>
+<p>R package pages: <a href="https://kullrich.github.io/scTEI/" class="external-link uri">https://kullrich.github.io/scTEI/</a></p>
+<p>R package issues: <a href="https://github.com/kullrich/scTEI/issues" class="external-link uri">https://github.com/kullrich/scTEI/issues</a></p>
 </div>
 <div class="section level1">
 <h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -274,7 +276,7 @@
 <span><span class="co">#)</span></span>
 <span></span>
 <span><span class="co">## make RidgePlot</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/RidgePlot.html" class="external-link">RidgePlot</a></span><span class="op">(</span></span>
 <span>    object <span class="op">=</span> <span class="va">celegans</span>,</span>
 <span>    features <span class="op">=</span> <span class="st">"TEI"</span></span>
@@ -305,7 +307,7 @@
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">p2</span>, <span class="va">p3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## get relative expression per cell group</span></span>
-<span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Ident2cellList.html">Ident2cellList</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Ident2cellList.html">Ident2cellList</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">reM</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/REMatrix.html">REMatrix</a></span><span class="op">(</span></span>
 <span>    ExpressionSet <span class="op">=</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> <span class="va">ps_vec</span>,</span>
@@ -474,7 +476,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## make RidgePlot</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">hvulgaris</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"curatedIdent"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">hvulgaris</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"curatedIdent"</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/RidgePlot.html" class="external-link">RidgePlot</a></span><span class="op">(</span></span>
 <span>    object <span class="op">=</span> <span class="va">hvulgaris</span>,</span>
 <span>    features <span class="op">=</span> <span class="st">"TEI"</span></span>
@@ -494,7 +496,7 @@
 <span><span class="va">p3</span></span>
 <span></span>
 <span><span class="co">## get relative expression per cell group</span></span>
-<span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Ident2cellList.html">Ident2cellList</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">hvulgaris</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Ident2cellList.html">Ident2cellList</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">hvulgaris</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">reM</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/REMatrix.html">REMatrix</a></span><span class="op">(</span></span>
 <span>    ExpressionSet <span class="op">=</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">hvulgaris</span>, assay<span class="op">=</span><span class="st">"SCT"</span>, layer<span class="op">=</span><span class="st">"data"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> <span class="va">ps_vec</span>,</span>
@@ -604,7 +606,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Kristian K Ullrich <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4308-9626" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Kristian K Ullrich <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4308-9626" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -621,7 +623,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
       </footer>

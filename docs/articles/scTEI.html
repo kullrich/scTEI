@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Single-Cell Expression Analysis with `scTEI` • scTEI</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../favicon-48x48.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -77,7 +76,7 @@
                         <h4 data-toc-skip class="author">Kristian K
 Ullrich</h4>
             
-            <h4 data-toc-skip class="date">2025-02-28</h4>
+            <h4 data-toc-skip class="date">2025-05-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/kullrich/scTEI/blob/HEAD/vignettes/scTEI.Rmd" class="external-link"><code>vignettes/scTEI.Rmd</code></a></small>
       <div class="hidden name"><code>scTEI.Rmd</code></div>
@@ -267,7 +266,7 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span>dims<span class="op">=</span><span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span>dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
+<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
@@ -299,7 +298,7 @@ Rödelsperger, and Sommer 2021)</span>
 <pre><code><span><span class="co">## Use multiple threads to calculate TEI on sparseMatrix</span></span>
 <span></span>
 <span><span class="va">celegans</span><span class="op">@</span><span class="va">meta.data</span><span class="op">[</span><span class="st">"TEI"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/TEI.html">TEI</a></span><span class="op">(</span></span>
-<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
+<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> <span class="va">ps_vec</span>,</span>
 <span>    split <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>    threads <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre>
@@ -310,20 +309,36 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    features <span class="op">=</span> <span class="st">"TEI"</span>,</span>
 <span>    min.cutoff<span class="op">=</span><span class="st">'q05'</span>,</span>
 <span>    max.cutoff<span class="op">=</span><span class="st">'q95'</span>,</span>
-<span>    cols <span class="op">=</span> <span class="fu">viridis</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<span>    cols <span class="op">=</span> <span class="fu">viridis</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: The `slot` argument of `FetchData()` is deprecated as of SeuratObject 5.0.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use the `layer` argument instead.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">##   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make RidgePlot</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">RidgePlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">celegans</span>,</span>
 <span>    features <span class="op">=</span> <span class="st">"TEI"</span>,</span>
-<span>    group.by <span class="op">=</span> <span class="st">"embryo.time.bin"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></code></pre></div>
+<span>    group.by <span class="op">=</span> <span class="st">"embryo.time.bin"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: `PackageCheck()` was deprecated in SeuratObject 5.0.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `rlang::check_installed()` instead.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">Seurat</span> package.</span></span>
+<span><span class="co">##   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/satijalab/seurat/issues&gt;</span>.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Picking joint bandwidth of 0.0512</span></span></code></pre>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make RidgePlot by cell type</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">RidgePlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">celegans</span>,</span>
 <span>    features <span class="op">=</span> <span class="st">"TEI"</span>,</span>
 <span>    group.by <span class="op">=</span> <span class="st">"cell.type"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -331,7 +346,7 @@ Rödelsperger, and Sommer 2021)</span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Picking joint bandwidth of 0.054</span></span></code></pre>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset to specific cell type - ADF + notClassified</span></span>
 <span><span class="va">ADF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">celegans</span>,</span>
 <span>    cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"ADF"</span>,</span>
@@ -339,22 +354,22 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"notClassified"</span>,</span>
 <span>         <span class="va">celegans</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">cell.type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">ADF</span><span class="op">)</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">ADF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">ADF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
 <span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">ADF</span><span class="op">)</span></span>
 <span><span class="va">p7</span> <span class="op">&lt;-</span> <span class="fu">RidgePlot</span><span class="op">(</span><span class="va">ADF</span>, <span class="st">"TEI"</span><span class="op">)</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">ADF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin.cell.type"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">ADF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin.cell.type"</span></span>
 <span><span class="va">p8</span> <span class="op">&lt;-</span> <span class="fu">RidgePlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">ADF</span>, features <span class="op">=</span> <span class="st">"TEI"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make grid plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">p5</span>, <span class="va">p6</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">p7</span>, <span class="va">p8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Picking joint bandwidth of 0.0608</span></span></code></pre>
 <pre><code><span><span class="co">## Picking joint bandwidth of 0.0704</span></span></code></pre>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># use pMatrix as data to cluster</span></span>
 <span></span>
 <span><span class="co"># Seurat v4</span></span>
@@ -368,7 +383,7 @@ Rödelsperger, and Sommer 2021)</span>
 <span></span>
 <span><span class="co"># Seurat v5</span></span>
 <span></span>
-<span><span class="va">celegans.TEI</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span></span>
+<span><span class="va">celegans.TEI</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span></span>
 <span>    counts <span class="op">=</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>    meta.data <span class="op">=</span> <span class="va">celegans</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span>
 <span><span class="va">celegans.TEI</span> <span class="op">&lt;-</span> <span class="fu">SetAssayData</span><span class="op">(</span></span>
@@ -428,21 +443,21 @@ Rödelsperger, and Sommer 2021)</span>
 <span><span class="co">## Negative:  WBGene00016463, WBGene00045336, WBGene00016711, WBGene00007883, WBGene00021915, WBGene00009983, WBGene00011763, WBGene00016254, WBGene00017068, WBGene00044020 </span></span>
 <span><span class="co">##     WBGene00011500, WBGene00003934, WBGene00003642, WBGene00016297, WBGene00004346, WBGene00002105, WBGene00011869, WBGene00020582, WBGene00019177, WBGene00010864 </span></span>
 <span><span class="co">##     WBGene00022441, WBGene00019482, WBGene00003745, WBGene00018164, WBGene00017076, WBGene00164973, WBGene00017236, WBGene00003851, WBGene00044232, WBGene00010632</span></span></code></pre>
-<pre><code><span><span class="co">## 13:17:23 UMAP embedding parameters a = 0.9922 b = 1.112</span></span></code></pre>
-<pre><code><span><span class="co">## 13:17:23 Read 6188 rows and found 20 numeric columns</span></span></code></pre>
-<pre><code><span><span class="co">## 13:17:23 Using Annoy for neighbor search, n_neighbors = 30</span></span></code></pre>
-<pre><code><span><span class="co">## 13:17:23 Building Annoy index with metric = cosine, n_trees = 50</span></span></code></pre>
+<pre><code><span><span class="co">## 01:31:25 UMAP embedding parameters a = 0.9922 b = 1.112</span></span></code></pre>
+<pre><code><span><span class="co">## 01:31:25 Read 6188 rows and found 20 numeric columns</span></span></code></pre>
+<pre><code><span><span class="co">## 01:31:25 Using Annoy for neighbor search, n_neighbors = 30</span></span></code></pre>
+<pre><code><span><span class="co">## 01:31:25 Building Annoy index with metric = cosine, n_trees = 50</span></span></code></pre>
 <pre><code><span><span class="co">## 0%   10   20   30   40   50   60   70   80   90   100%</span></span></code></pre>
 <pre><code><span><span class="co">## [----|----|----|----|----|----|----|----|----|----|</span></span></code></pre>
 <pre><code><span><span class="co">## **************************************************|</span></span>
-<span><span class="co">## 13:17:23 Writing NN index file to temp file /var/folders/wy/d_ysgzdd3_bdgz02jfdy12z00000gp/T//RtmpqwpWAk/filee94538642fb1</span></span>
-<span><span class="co">## 13:17:23 Searching Annoy index using 1 thread, search_k = 3000</span></span>
-<span><span class="co">## 13:17:24 Annoy recall = 100%</span></span>
-<span><span class="co">## 13:17:24 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
-<span><span class="co">## 13:17:25 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
-<span><span class="co">## 13:17:25 Commencing optimization for 500 epochs, with 252246 positive edges</span></span>
-<span><span class="co">## 13:17:25 Using rng type: pcg</span></span>
-<span><span class="co">## 13:17:31 Optimization finished</span></span></code></pre>
+<span><span class="co">## 01:31:25 Writing NN index file to temp file /var/folders/wy/d_ysgzdd3_bdgz02jfdy12z00000gp/T//RtmpQpytaG/file8c724e42e8f4</span></span>
+<span><span class="co">## 01:31:25 Searching Annoy index using 1 thread, search_k = 3000</span></span>
+<span><span class="co">## 01:31:26 Annoy recall = 100%</span></span>
+<span><span class="co">## 01:31:27 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30</span></span>
+<span><span class="co">## 01:31:28 Initializing from normalized Laplacian + noise (using RSpectra)</span></span>
+<span><span class="co">## 01:31:28 Commencing optimization for 500 epochs, with 252246 positive edges</span></span>
+<span><span class="co">## 01:31:28 Using rng type: pcg</span></span>
+<span><span class="co">## 01:31:33 Optimization finished</span></span></code></pre>
 <pre><code><span><span class="co">## Use multiple threads to calculate pMatrix</span></span>
 <span></span>
 <span><span class="co"># Seurat v4</span></span>
@@ -455,22 +470,22 @@ Rödelsperger, and Sommer 2021)</span>
 <span></span>
 <span><span class="co"># Seurat v5</span></span>
 <span></span>
-<span><span class="va">celegans.TEI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">SetAssayData</a></span><span class="op">(</span></span>
+<span><span class="va">celegans.TEI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html" class="external-link">SetAssayData</a></span><span class="op">(</span></span>
 <span>    object <span class="op">=</span> <span class="va">celegans.TEI</span>,</span>
 <span>    layer <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>    new.data <span class="op">=</span> <span class="fu"><a href="../reference/pMatrixTEI.html">pMatrixTEI</a></span><span class="op">(</span></span>
-<span>        ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans.TEI</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
+<span>        ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans.TEI</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>        Phylostratum <span class="op">=</span> <span class="va">ps_vec</span>,</span>
 <span>        split <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>        threads <span class="op">=</span> <span class="fl">2</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"embryo.time.bin"</span></span>
 <span><span class="va">p9</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p9</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make FeaturePlot</span></span>
 <span><span class="va">p10</span> <span class="op">&lt;-</span> <span class="fu">FeaturePlot</span><span class="op">(</span></span>
 <span>    object <span class="op">=</span> <span class="va">celegans.TEI</span>,</span>
@@ -480,18 +495,18 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    cols <span class="op">=</span> <span class="fu">viridis</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
 <span><span class="va">p11</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">celegans</span><span class="op">)</span></span>
-<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cell.type"</span></span>
 <span><span class="va">p12</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">celegans.TEI</span><span class="op">)</span></span>
 <span><span class="co"># make grid plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">p2</span>, <span class="va">p11</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">p10</span>, <span class="va">p12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get TEI per strata</span></span>
 <span><span class="va">pS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pStrataTEI.html">pStrataTEI</a></span><span class="op">(</span></span>
 <span>    ExpressionSet <span class="op">=</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
@@ -512,13 +527,13 @@ Rödelsperger, and Sommer 2021)</span>
 <span><span class="co"># Seurat v5</span></span>
 <span></span>
 <span><span class="va">pS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pStrataTEI.html">pStrataTEI</a></span><span class="op">(</span></span>
-<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
+<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> </span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">celegans_ps</span><span class="op">$</span><span class="va">Phylostratum</span><span class="op">)</span>,</span>
 <span>        <span class="va">celegans_ps</span><span class="op">$</span><span class="va">GeneID</span><span class="op">)</span>,</span>
 <span>    split <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>    threads <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get permutations</span></span>
 <span></span>
 <span><span class="co"># Seurat v4</span></span>
@@ -551,13 +566,13 @@ Rödelsperger, and Sommer 2021)</span>
 <span><span class="co"># Seurat v5</span></span>
 <span></span>
 <span><span class="va">bM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bootTEI.html">bootTEI</a></span><span class="op">(</span></span>
-<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
+<span>    ExpressionSet <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> <span class="va">ps_vec</span>,</span>
 <span>    permutations <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>    split <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>    threads <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get mean expression matrix</span></span>
 <span></span>
 <span><span class="co"># Seurat v4</span></span>
@@ -573,7 +588,7 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    ExpressionSet <span class="op">=</span> <span class="fu">GetAssayData</span><span class="op">(</span><span class="va">celegans</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, layer<span class="op">=</span><span class="st">"data"</span><span class="op">)</span>,</span>
 <span>    Phylostratum <span class="op">=</span> <span class="va">ps_vec</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get mean expression matrix with groups</span></span>
 <span></span>
 <span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
@@ -602,7 +617,7 @@ Rödelsperger, and Sommer 2021)</span>
 <span>    cluster_rows <span class="op">=</span> <span class="cn">FALSE</span>, cluster_columns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    col <span class="op">=</span> <span class="fu">viridis</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># computing relative expression profile over cell types</span></span>
 <span></span>
 <span><span class="va">cell_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
@@ -645,7 +660,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <div class="section level3">
 <h3 id="example-6k-c--elegans-embryos-from-packer-and-zhu-et-al-2019-1">Example: 6k C. elegans embryos from Packer and Zhu et al (2019)<a class="anchor" aria-label="anchor" href="#example-6k-c--elegans-embryos-from-packer-and-zhu-et-al-2019-1"></a>
 </h3>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load Packer and Zhu et al (2019) data set</span></span>
 <span></span>
 <span><span class="co">#expression_matrix &lt;- readRDS(</span></span>
@@ -689,7 +704,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>    cell_metadata <span class="op">=</span> <span class="va">cell_metadata</span>,</span>
 <span>    gene_metadata <span class="op">=</span> <span class="va">gene_annotation</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># preprocess scRNA</span></span>
 <span><span class="va">cds</span> <span class="op">&lt;-</span> <span class="fu">preprocess_cds</span><span class="op">(</span><span class="va">cds</span>, num_dim <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="va">cds</span> <span class="op">&lt;-</span> <span class="fu">align_cds</span><span class="op">(</span><span class="va">cds</span>, alignment_group <span class="op">=</span> <span class="st">"batch"</span>,</span>
@@ -700,7 +715,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span><span class="va">cds</span> <span class="op">&lt;-</span> <span class="fu">cluster_cells</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span></span>
 <span><span class="va">cds</span> <span class="op">&lt;-</span> <span class="fu">learn_graph</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span></code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_cells</span><span class="op">(</span><span class="va">cds</span>,</span>
 <span>    label_groups_by_cluster<span class="op">=</span><span class="cn">FALSE</span>,</span>
 <span>    color_cells_by <span class="op">=</span> <span class="st">"embryo.time.bin"</span>,</span>
@@ -711,7 +726,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>    graph_label_size<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># order cells - select youngest time point according to embryo.time</span></span>
 <span><span class="co"># - center of the plot</span></span>
 <span><span class="va">cds</span> <span class="op">&lt;-</span> <span class="fu">order_cells</span><span class="op">(</span><span class="va">cds</span>,</span>
@@ -730,7 +745,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>    graph_label_size<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load Caenorhabditis elegans gene age estimation</span></span>
 <span><span class="va">celegans_ps</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_tsv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,</span>
 <span>    <span class="st">"Sun2021_Orthomap.tsv"</span>, package <span class="op">=</span> <span class="st">"scTEI"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -742,16 +757,16 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">celegans_ps</span><span class="op">$</span><span class="va">Phylostratum</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##    0    1    2    3    4    5    6    7    8    9   10   11   12   13 </span></span>
 <span><span class="co">## 1290 5434 4666  603 1039  808  274  884  590  511  384 1113 1277 1167</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define Phylostratum</span></span>
 <span><span class="va">ps_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">celegans_ps</span><span class="op">$</span><span class="va">Phylostratum</span><span class="op">)</span>,</span>
 <span>    <span class="va">celegans_ps</span><span class="op">$</span><span class="va">GeneID</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add TEI values</span></span>
 <span><span class="fu">colData</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span><span class="op">[</span><span class="st">"TEI"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/TEI.html">TEI</a></span><span class="op">(</span></span>
 <span>    ExpressionSet <span class="op">=</span> <span class="fu">counts</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span>,</span>
@@ -765,7 +780,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>        <span class="va">celegans_ps</span><span class="op">$</span><span class="va">GeneID</span><span class="op">)</span>,</span>
 <span>    split <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>    threads <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make FeaturePlot</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">plot_cells</span><span class="op">(</span><span class="va">cds</span>,</span>
 <span>    label_groups_by_cluster<span class="op">=</span><span class="cn">FALSE</span>,</span>
@@ -778,7 +793,7 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>    cell_size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make Boxplot</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">embryo.time.bin</span>, y<span class="op">=</span><span class="va">TEI</span>, fill<span class="op">=</span><span class="va">embryo.time.bin</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -786,20 +801,20 @@ et al. 2019)</span> and phylogenetic data obtained from <span class="citation">(
 <span>    <span class="fu">geom_boxplot</span><span class="op">(</span>width<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make scatter plot - TEI vs pseudotime</span></span>
 <span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">pseudotime</span>, y<span class="op">=</span><span class="va">TEI</span>, col<span class="op">=</span><span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">cds</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">pseudotime</span>, y<span class="op">=</span><span class="va">TEI</span>, col<span class="op">=</span><span class="va">embryo.time.bin</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p6</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-28-2.png" width="672" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make grid plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scTEI_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;"></p>
@@ -929,15 +944,15 @@ Nematodes.”</span> <em>Genome Research</em> 31 (9): 1590–1601.
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
+<pre><code><span><span class="co">## R Under development (unstable) (2025-03-10 r87922)</span></span>
 <span><span class="co">## Platform: aarch64-apple-darwin20</span></span>
-<span><span class="co">## Running under: macOS Sequoia 15.2</span></span>
+<span><span class="co">## Running under: macOS Sequoia 15.3.2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib </span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -950,109 +965,108 @@ Nematodes.”</span> <em>Genome Research</em> 31 (9): 1590–1601.
 <span><span class="co">## [8] methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] monocle3_1.3.7                   SingleCellExperiment_1.28.1     </span></span>
-<span><span class="co">##  [3] SummarizedExperiment_1.36.0      GenomicRanges_1.58.0            </span></span>
-<span><span class="co">##  [5] GenomeInfoDb_1.42.3              IRanges_2.40.1                  </span></span>
-<span><span class="co">##  [7] S4Vectors_0.44.0                 MatrixGenerics_1.18.1           </span></span>
-<span><span class="co">##  [9] matrixStats_1.5.0                Biobase_2.66.0                  </span></span>
-<span><span class="co">## [11] BiocGenerics_0.52.0              celegans.embryo.SeuratData_0.1.0</span></span>
-<span><span class="co">## [13] SeuratData_0.2.2.9001            Seurat_5.2.1                    </span></span>
-<span><span class="co">## [15] SeuratObject_5.0.2               sp_2.2-0                        </span></span>
-<span><span class="co">## [17] ComplexHeatmap_2.22.0            ggplot2_3.5.1                   </span></span>
-<span><span class="co">## [19] cowplot_1.1.3                    viridis_0.6.5                   </span></span>
-<span><span class="co">## [21] viridisLite_0.4.2                readr_2.1.5                     </span></span>
-<span><span class="co">## [23] plyr_1.8.9                       dplyr_1.1.4                     </span></span>
-<span><span class="co">## [25] scTEI_0.1.1                      BiocStyle_2.34.0                </span></span>
+<span><span class="co">##  [1] celegans.embryo.SeuratData_0.1.0 monocle3_1.3.7                  </span></span>
+<span><span class="co">##  [3] SingleCellExperiment_1.30.1      SummarizedExperiment_1.38.1     </span></span>
+<span><span class="co">##  [5] GenomicRanges_1.60.0             GenomeInfoDb_1.44.0             </span></span>
+<span><span class="co">##  [7] IRanges_2.42.0                   S4Vectors_0.46.0                </span></span>
+<span><span class="co">##  [9] MatrixGenerics_1.20.0            matrixStats_1.5.0               </span></span>
+<span><span class="co">## [11] Biobase_2.68.0                   BiocGenerics_0.54.0             </span></span>
+<span><span class="co">## [13] generics_0.1.4                   SeuratData_0.2.2.9002           </span></span>
+<span><span class="co">## [15] Seurat_5.3.0                     SeuratObject_5.1.0              </span></span>
+<span><span class="co">## [17] sp_2.2-0                         ComplexHeatmap_2.24.0           </span></span>
+<span><span class="co">## [19] ggplot2_3.5.2                    cowplot_1.1.3                   </span></span>
+<span><span class="co">## [21] viridis_0.6.5                    viridisLite_0.4.2               </span></span>
+<span><span class="co">## [23] readr_2.1.5                      plyr_1.8.9                      </span></span>
+<span><span class="co">## [25] dplyr_1.1.4                      scTEI_0.1.1                     </span></span>
+<span><span class="co">## [27] BiocStyle_2.36.0                </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] fs_1.6.5                  spatstat.sparse_3.1-0    </span></span>
+<span><span class="co">##   [1] fs_1.6.6                  spatstat.sparse_3.1-0    </span></span>
 <span><span class="co">##   [3] httr_1.4.7                RColorBrewer_1.1-3       </span></span>
-<span><span class="co">##   [5] doParallel_1.0.17         tools_4.4.2              </span></span>
-<span><span class="co">##   [7] sctransform_0.4.1         ResidualMatrix_1.16.0    </span></span>
+<span><span class="co">##   [5] doParallel_1.0.17         tools_4.5.0              </span></span>
+<span><span class="co">##   [7] sctransform_0.4.2         ResidualMatrix_1.18.0    </span></span>
 <span><span class="co">##   [9] R6_2.6.1                  lazyeval_0.2.2           </span></span>
 <span><span class="co">##  [11] uwot_0.2.3                GetoptLong_1.0.5         </span></span>
 <span><span class="co">##  [13] withr_3.0.2               gridExtra_2.3            </span></span>
 <span><span class="co">##  [15] myTAI_2.0.0               progressr_0.15.1         </span></span>
-<span><span class="co">##  [17] taxizedb_0.3.1            cli_3.6.4                </span></span>
-<span><span class="co">##  [19] textshaping_1.0.0         Cairo_1.6-2              </span></span>
-<span><span class="co">##  [21] spatstat.explore_3.3-4    fastDummies_1.7.5        </span></span>
-<span><span class="co">##  [23] labeling_0.4.3            sass_0.4.9               </span></span>
-<span><span class="co">##  [25] spatstat.data_3.1-4       proxy_0.4-27             </span></span>
+<span><span class="co">##  [17] taxizedb_0.3.1            cli_3.6.5                </span></span>
+<span><span class="co">##  [19] textshaping_1.0.1         Cairo_1.6-2              </span></span>
+<span><span class="co">##  [21] spatstat.explore_3.4-2    fastDummies_1.7.5        </span></span>
+<span><span class="co">##  [23] labeling_0.4.3            sass_0.4.10              </span></span>
+<span><span class="co">##  [25] spatstat.data_3.1-6       proxy_0.4-27             </span></span>
 <span><span class="co">##  [27] ggridges_0.5.6            pbapply_1.7-2            </span></span>
-<span><span class="co">##  [29] pkgdown_2.1.1             systemfonts_1.2.1        </span></span>
-<span><span class="co">##  [31] parallelly_1.42.0         limma_3.62.2             </span></span>
-<span><span class="co">##  [33] rstudioapi_0.17.1         RSQLite_2.3.9            </span></span>
-<span><span class="co">##  [35] generics_0.1.3            shape_1.4.6.1            </span></span>
-<span><span class="co">##  [37] ica_1.0-3                 spatstat.random_3.3-2    </span></span>
-<span><span class="co">##  [39] vroom_1.6.5               Matrix_1.7-2             </span></span>
-<span><span class="co">##  [41] ggbeeswarm_0.7.2          abind_1.4-8              </span></span>
-<span><span class="co">##  [43] lifecycle_1.0.4           yaml_2.3.10              </span></span>
-<span><span class="co">##  [45] SparseArray_1.6.2         Rtsne_0.17               </span></span>
-<span><span class="co">##  [47] blob_1.2.4                promises_1.3.2           </span></span>
-<span><span class="co">##  [49] crayon_1.5.3              miniUI_0.1.1.1           </span></span>
-<span><span class="co">##  [51] lattice_0.22-6            beachmat_2.22.0          </span></span>
-<span><span class="co">##  [53] magick_2.8.5              pillar_1.10.1            </span></span>
-<span><span class="co">##  [55] knitr_1.49                rjson_0.2.23             </span></span>
-<span><span class="co">##  [57] boot_1.3-31               future.apply_1.11.3      </span></span>
-<span><span class="co">##  [59] codetools_0.2-20          glue_1.8.0               </span></span>
-<span><span class="co">##  [61] leidenbase_0.1.32         spatstat.univar_3.1-1    </span></span>
-<span><span class="co">##  [63] data.table_1.17.0         vctrs_0.6.5              </span></span>
-<span><span class="co">##  [65] png_0.1-8                 spam_2.11-1              </span></span>
-<span><span class="co">##  [67] Rdpack_2.6.2              gtable_0.3.6             </span></span>
-<span><span class="co">##  [69] assertthat_0.2.1          cachem_1.1.0             </span></span>
-<span><span class="co">##  [71] xfun_0.51                 rbibutils_2.3            </span></span>
-<span><span class="co">##  [73] S4Arrays_1.6.0            mime_0.12                </span></span>
-<span><span class="co">##  [75] reformulas_0.4.0          survival_3.8-3           </span></span>
-<span><span class="co">##  [77] iterators_1.0.14          statmod_1.5.0            </span></span>
-<span><span class="co">##  [79] fitdistrplus_1.2-2        ROCR_1.0-11              </span></span>
-<span><span class="co">##  [81] nlme_3.1-167              bit64_4.6.0-1            </span></span>
-<span><span class="co">##  [83] RcppAnnoy_0.0.22          bslib_0.9.0              </span></span>
-<span><span class="co">##  [85] irlba_2.3.5.1             vipor_0.4.7              </span></span>
-<span><span class="co">##  [87] KernSmooth_2.23-26        colorspace_2.1-1         </span></span>
-<span><span class="co">##  [89] DBI_1.2.3                 ggrastr_1.0.2            </span></span>
-<span><span class="co">##  [91] tidyselect_1.2.1          bit_4.5.0.1              </span></span>
-<span><span class="co">##  [93] compiler_4.4.2            curl_6.2.1               </span></span>
-<span><span class="co">##  [95] BiocNeighbors_2.0.1       desc_1.4.3               </span></span>
-<span><span class="co">##  [97] DelayedArray_0.32.0       plotly_4.10.4            </span></span>
-<span><span class="co">##  [99] bookdown_0.42             scales_1.3.0             </span></span>
-<span><span class="co">## [101] lmtest_0.9-40             rappdirs_0.3.3           </span></span>
-<span><span class="co">## [103] stringr_1.5.1             digest_0.6.37            </span></span>
-<span><span class="co">## [105] goftest_1.2-3             spatstat.utils_3.1-2     </span></span>
-<span><span class="co">## [107] minqa_1.2.8               rmarkdown_2.29           </span></span>
-<span><span class="co">## [109] XVector_0.46.0            htmltools_0.5.8.1        </span></span>
-<span><span class="co">## [111] pkgconfig_2.0.3           lme4_1.1-36              </span></span>
-<span><span class="co">## [113] sparseMatrixStats_1.18.0  dbplyr_2.5.0             </span></span>
-<span><span class="co">## [115] fastmap_1.2.0             rlang_1.1.5              </span></span>
-<span><span class="co">## [117] GlobalOptions_0.1.2       htmlwidgets_1.6.4        </span></span>
-<span><span class="co">## [119] UCSC.utils_1.2.0          shiny_1.10.0             </span></span>
-<span><span class="co">## [121] DelayedMatrixStats_1.28.1 farver_2.1.2             </span></span>
-<span><span class="co">## [123] jquerylib_0.1.4           zoo_1.8-13               </span></span>
-<span><span class="co">## [125] jsonlite_1.9.0            BiocParallel_1.40.0      </span></span>
-<span><span class="co">## [127] BiocSingular_1.22.0       magrittr_2.0.3           </span></span>
-<span><span class="co">## [129] scuttle_1.16.0            GenomeInfoDbData_1.2.13  </span></span>
-<span><span class="co">## [131] dotCall64_1.2             patchwork_1.3.0          </span></span>
-<span><span class="co">## [133] munsell_0.5.1             Rcpp_1.0.14              </span></span>
-<span><span class="co">## [135] reticulate_1.41.0         stringi_1.8.4            </span></span>
-<span><span class="co">## [137] zlibbioc_1.52.0           MASS_7.3-64              </span></span>
-<span><span class="co">## [139] parallel_4.4.2            listenv_0.9.1            </span></span>
-<span><span class="co">## [141] ggrepel_0.9.6             deldir_2.0-4             </span></span>
-<span><span class="co">## [143] splines_4.4.2             tensor_1.5               </span></span>
-<span><span class="co">## [145] hms_1.1.3                 circlize_0.4.16          </span></span>
-<span><span class="co">## [147] igraph_2.1.4              spatstat.geom_3.3-5      </span></span>
-<span><span class="co">## [149] RcppHNSW_0.6.0            ScaledMatrix_1.14.0      </span></span>
-<span><span class="co">## [151] reshape2_1.4.4            evaluate_1.0.3           </span></span>
-<span><span class="co">## [153] hoardr_0.5.5              BiocManager_1.30.25      </span></span>
-<span><span class="co">## [155] batchelor_1.22.0          nloptr_2.1.1             </span></span>
-<span><span class="co">## [157] tzdb_0.4.0                foreach_1.5.2            </span></span>
-<span><span class="co">## [159] httpuv_1.6.15             RANN_2.6.2               </span></span>
-<span><span class="co">## [161] tidyr_1.3.1               purrr_1.0.4              </span></span>
-<span><span class="co">## [163] polyclip_1.10-7           future_1.34.0            </span></span>
-<span><span class="co">## [165] clue_0.3-66               scattermore_1.2          </span></span>
-<span><span class="co">## [167] rsvd_1.0.5                xtable_1.8-4             </span></span>
-<span><span class="co">## [169] RSpectra_0.16-2           later_1.4.1              </span></span>
-<span><span class="co">## [171] ragg_1.3.3                tibble_3.2.1             </span></span>
-<span><span class="co">## [173] memoise_2.0.1             beeswarm_0.4.0           </span></span>
-<span><span class="co">## [175] cluster_2.1.8             globals_0.16.3</span></span></code></pre>
+<span><span class="co">##  [29] pkgdown_2.1.2             systemfonts_1.2.3        </span></span>
+<span><span class="co">##  [31] parallelly_1.44.0         limma_3.64.0             </span></span>
+<span><span class="co">##  [33] rstudioapi_0.17.1         RSQLite_2.3.11           </span></span>
+<span><span class="co">##  [35] shape_1.4.6.1             ica_1.0-3                </span></span>
+<span><span class="co">##  [37] spatstat.random_3.3-3     vroom_1.6.5              </span></span>
+<span><span class="co">##  [39] Matrix_1.7-3              ggbeeswarm_0.7.2         </span></span>
+<span><span class="co">##  [41] abind_1.4-8               lifecycle_1.0.4          </span></span>
+<span><span class="co">##  [43] yaml_2.3.10               SparseArray_1.8.0        </span></span>
+<span><span class="co">##  [45] Rtsne_0.17                blob_1.2.4               </span></span>
+<span><span class="co">##  [47] promises_1.3.2            crayon_1.5.3             </span></span>
+<span><span class="co">##  [49] miniUI_0.1.2              lattice_0.22-7           </span></span>
+<span><span class="co">##  [51] beachmat_2.24.0           pillar_1.10.2            </span></span>
+<span><span class="co">##  [53] knitr_1.50                rjson_0.2.23             </span></span>
+<span><span class="co">##  [55] boot_1.3-31               future.apply_1.11.3      </span></span>
+<span><span class="co">##  [57] codetools_0.2-20          glue_1.8.0               </span></span>
+<span><span class="co">##  [59] leidenbase_0.1.35         spatstat.univar_3.1-3    </span></span>
+<span><span class="co">##  [61] data.table_1.17.2         vctrs_0.6.5              </span></span>
+<span><span class="co">##  [63] png_0.1-8                 spam_2.11-1              </span></span>
+<span><span class="co">##  [65] Rdpack_2.6.4              gtable_0.3.6             </span></span>
+<span><span class="co">##  [67] assertthat_0.2.1          cachem_1.1.0             </span></span>
+<span><span class="co">##  [69] xfun_0.52                 rbibutils_2.3            </span></span>
+<span><span class="co">##  [71] S4Arrays_1.7.2            mime_0.13                </span></span>
+<span><span class="co">##  [73] reformulas_0.4.1          survival_3.8-3           </span></span>
+<span><span class="co">##  [75] iterators_1.0.14          statmod_1.5.0            </span></span>
+<span><span class="co">##  [77] fitdistrplus_1.2-2        ROCR_1.0-11              </span></span>
+<span><span class="co">##  [79] nlme_3.1-168              bit64_4.6.0-1            </span></span>
+<span><span class="co">##  [81] RcppAnnoy_0.0.22          bslib_0.9.0              </span></span>
+<span><span class="co">##  [83] irlba_2.3.5.1             vipor_0.4.7              </span></span>
+<span><span class="co">##  [85] KernSmooth_2.23-26        colorspace_2.1-1         </span></span>
+<span><span class="co">##  [87] DBI_1.2.3                 ggrastr_1.0.2            </span></span>
+<span><span class="co">##  [89] tidyselect_1.2.1          bit_4.6.0                </span></span>
+<span><span class="co">##  [91] compiler_4.5.0            curl_6.2.2               </span></span>
+<span><span class="co">##  [93] BiocNeighbors_2.2.0       desc_1.4.3               </span></span>
+<span><span class="co">##  [95] DelayedArray_0.34.1       plotly_4.10.4            </span></span>
+<span><span class="co">##  [97] bookdown_0.43             scales_1.4.0             </span></span>
+<span><span class="co">##  [99] lmtest_0.9-40             rappdirs_0.3.3           </span></span>
+<span><span class="co">## [101] stringr_1.5.1             digest_0.6.37            </span></span>
+<span><span class="co">## [103] goftest_1.2-3             spatstat.utils_3.1-4     </span></span>
+<span><span class="co">## [105] minqa_1.2.8               rmarkdown_2.29           </span></span>
+<span><span class="co">## [107] XVector_0.48.0            htmltools_0.5.8.1        </span></span>
+<span><span class="co">## [109] pkgconfig_2.0.3           lme4_1.1-37              </span></span>
+<span><span class="co">## [111] sparseMatrixStats_1.20.0  dbplyr_2.5.0             </span></span>
+<span><span class="co">## [113] fastmap_1.2.0             rlang_1.1.6              </span></span>
+<span><span class="co">## [115] GlobalOptions_0.1.2       htmlwidgets_1.6.4        </span></span>
+<span><span class="co">## [117] UCSC.utils_1.4.0          shiny_1.10.0             </span></span>
+<span><span class="co">## [119] DelayedMatrixStats_1.30.0 farver_2.1.2             </span></span>
+<span><span class="co">## [121] jquerylib_0.1.4           zoo_1.8-14               </span></span>
+<span><span class="co">## [123] jsonlite_2.0.0            BiocParallel_1.42.0      </span></span>
+<span><span class="co">## [125] BiocSingular_1.24.0       magrittr_2.0.3           </span></span>
+<span><span class="co">## [127] scuttle_1.18.0            GenomeInfoDbData_1.2.14  </span></span>
+<span><span class="co">## [129] dotCall64_1.2             patchwork_1.3.0          </span></span>
+<span><span class="co">## [131] Rcpp_1.0.14               reticulate_1.42.0        </span></span>
+<span><span class="co">## [133] stringi_1.8.7             MASS_7.3-65              </span></span>
+<span><span class="co">## [135] parallel_4.5.0            listenv_0.9.1            </span></span>
+<span><span class="co">## [137] ggrepel_0.9.6             deldir_2.0-4             </span></span>
+<span><span class="co">## [139] splines_4.5.0             tensor_1.5               </span></span>
+<span><span class="co">## [141] hms_1.1.3                 circlize_0.4.16          </span></span>
+<span><span class="co">## [143] igraph_2.1.4              spatstat.geom_3.3-6      </span></span>
+<span><span class="co">## [145] RcppHNSW_0.6.0            ScaledMatrix_1.16.0      </span></span>
+<span><span class="co">## [147] reshape2_1.4.4            evaluate_1.0.3           </span></span>
+<span><span class="co">## [149] hoardr_0.5.5              BiocManager_1.30.25      </span></span>
+<span><span class="co">## [151] nloptr_2.2.1              tzdb_0.5.0               </span></span>
+<span><span class="co">## [153] foreach_1.5.2             httpuv_1.6.16            </span></span>
+<span><span class="co">## [155] batchelor_1.24.0          RANN_2.6.2               </span></span>
+<span><span class="co">## [157] tidyr_1.3.1               purrr_1.0.4              </span></span>
+<span><span class="co">## [159] polyclip_1.10-7           future_1.49.0            </span></span>
+<span><span class="co">## [161] clue_0.3-66               scattermore_1.2          </span></span>
+<span><span class="co">## [163] rsvd_1.0.5                xtable_1.8-4             </span></span>
+<span><span class="co">## [165] RSpectra_0.16-2           later_1.4.2              </span></span>
+<span><span class="co">## [167] ragg_1.4.0                tibble_3.2.1             </span></span>
+<span><span class="co">## [169] memoise_2.0.1             beeswarm_0.4.0           </span></span>
+<span><span class="co">## [171] cluster_2.1.8.1           globals_0.18.0</span></span></code></pre>
 </div>
   </div>
 
@@ -1071,7 +1085,7 @@ Nematodes.”</span> <em>Genome Research</em> 31 (9): 1590–1601.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
       </footer>

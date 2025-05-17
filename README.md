@@ -1,5 +1,8 @@
 # scTEI <a href="https://github.com/kullrich/scTEI"><img src="man/figures/logo.png" align="right" height="160" /></a>
 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![GPL3license](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](https://opensource.org/license/gpl-3-0)
+
 scTEI - add any phylogenetically based transcriptome evolutionary index (TEI) to single-cell data objects
 =====
 
